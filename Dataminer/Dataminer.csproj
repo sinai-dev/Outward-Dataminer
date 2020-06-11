@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E387021F-FA7C-410E-9A15-D80F8F384065}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dataminer</RootNamespace>
+    <AssemblyName>Dataminer</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\BepInEx\core\BepInEx.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BepInEx.Harmony">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\BepInEx\core\BepInEx.Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MonoMod.RuntimeDetour">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\BepInEx\core\MonoMod.RuntimeDetour.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="netstandard">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\netstandard.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Photon3Unity3D">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\Photon3Unity3D.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rewired_Core">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\Rewired_Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\Outward_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AttackTimer.cs" />
+    <Compile Include="Dataminer.cs" />
+    <Compile Include="ListManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SceneHelper.cs" />
+    <Compile Include="SceneManager.cs" />
+    <Compile Include="Serializer\Localization\DM_Localization.cs" />
+    <Compile Include="Serializer\Serializer.cs" />
+    <Compile Include="Serializer\Character\DM_Enemy.cs" />
+    <Compile Include="Serializer\Character\DM_Merchant.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_AngleFwdToTargetFwdCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_AttackTypeCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_BooleanCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_ContainedWaterCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_CounterSuccessCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_DealtDamageCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_DelayEffectCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_EquipDurabilityCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_HasQuantityItemsCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_HasStatusEffectCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_HasStatusLevelCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_HeightCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_ImbueEffectCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_ImbueEffectORCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_InZoneCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_IsEquipSlotFilledCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_IsWorldHostCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_MostRecentCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_OwnsItemCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_PassiveSkillCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_ProbabilityCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_ProximityCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_ProximitySoulSpotCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_QuestEventAreaCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_ShooterPosStatusEffect.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_StatusEffectCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_TimeDelayCondition.cs" />
+    <Compile Include="Serializer\Effect\Conditions\DM_WeaponIsLoadedCondition.cs" />
+    <Compile Include="Serializer\Effect\DM_Effect.cs" />
+    <Compile Include="Serializer\Effect\DM_EffectCondition.cs" />
+    <Compile Include="Serializer\Effect\DM_EffectTransform.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectBurntHealth.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectBurntMana.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectBurntStamina.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectCorruption.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectDrink.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectFatigue.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectFood.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectHealth.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectHealthParentOwner.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectMana.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectStability.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectStamina.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectStat.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_AddBoonEffect.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_AddStatusEffect.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_AddStatusEffectBuildUp.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_AddStatusImmunity.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_AutoKnock.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_CallSquadMembers.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_Cough.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_CureDisease.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_Death.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_DetachParasite.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_GiveOrder.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ImbueWeapon.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_LightLantern.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_LoadWeapon.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_PlaySoundEffect.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_Puke.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_PunctualDamage.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_PunctualDamageAoE.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ReduceDurability.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ReduceStatusLevel.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_RemoveImbueEffects.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_RemoveStatusEffect.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_RunicBlade.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ShootBlast.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ShootBlastHornetControl.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ShootBlastProximity.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_Shooter.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ShootItem.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ShootProjectile.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ShootProjectilePistol.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_StartDuel.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_Stun.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_Summon.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_SummonAI.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_SummonBloodSpirit.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_Teleport.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_ThrowItem.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_UnloadWeapon.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_UseLoadoutAmmunition.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_VitalityDamage.cs" />
+    <Compile Include="Serializer\Effect\Effects\DM_WeaponDamage.cs" />
+    <Compile Include="Serializer\General\DM_Damage.cs" />
+    <Compile Include="Serializer\General\DM_Quantity.cs" />
+    <Compile Include="Serializer\Item\DM_Item.cs" />
+    <Compile Include="Serializer\Item\DM_Armor.cs" />
+    <Compile Include="Serializer\Item\DM_Bag.cs" />
+    <Compile Include="Serializer\Item\DM_Equipment.cs" />
+    <Compile Include="Serializer\Item\DM_Weapon.cs" />
+    <Compile Include="Serializer\Item\ItemStats\DM_EquipmentStats.cs" />
+    <Compile Include="Serializer\Item\ItemStats\DM_ItemStats.cs" />
+    <Compile Include="Serializer\Item\ItemStats\DM_WeaponStats.cs" />
+    <Compile Include="Serializer\Item\Skill\DM_AttackSkill.cs" />
+    <Compile Include="Serializer\Item\Skill\DM_CounterAbsorbSkill.cs" />
+    <Compile Include="Serializer\Item\Skill\DM_CounterSelfSkill.cs" />
+    <Compile Include="Serializer\Item\Skill\DM_CounterSkill.cs" />
+    <Compile Include="Serializer\Item\Skill\DM_MeleeSkill.cs" />
+    <Compile Include="Serializer\Item\Skill\DM_RangeAttackSkill.cs" />
+    <Compile Include="Serializer\Item\DM_RecipeItem.cs" />
+    <Compile Include="Serializer\Item\Skill\DM_Skill.cs" />
+    <Compile Include="Serializer\Item\Skill\DM_ThrowSkill.cs" />
+    <Compile Include="Serializer\Item\Skill\DM_TrinketSkill.cs" />
+    <Compile Include="Serializer\Recipe\DM_Recipe.cs" />
+    <Compile Include="Serializer\Scene\DroptableSummary.cs" />
+    <Compile Include="Serializer\Scene\LootContainerSummary.cs" />
+    <Compile Include="Serializer\Loot\DropTable\DM_DropTableEntry.cs" />
+    <Compile Include="Serializer\Loot\DM_DropTable.cs" />
+    <Compile Include="Serializer\Loot\DM_Gatherable.cs" />
+    <Compile Include="Serializer\Loot\DM_ItemSpawn.cs" />
+    <Compile Include="Serializer\Loot\DM_LootContainer.cs" />
+    <Compile Include="Serializer\Scene\SceneSummary.cs" />
+    <Compile Include="Serializer\Status\DM_ImbueEffect.cs" />
+    <Compile Include="Serializer\Status\DM_StatusEffect.cs" />
+    <Compile Include="util\AccessTools.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
