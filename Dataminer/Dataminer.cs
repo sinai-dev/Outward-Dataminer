@@ -19,8 +19,10 @@ namespace Dataminer
 
         internal void Awake()
         {
-            var obj = new GameObject("AttackTimerGUI");
+            var obj = new GameObject("Dataminer");
             DontDestroyOnLoad(obj);
+            obj.AddComponent<ListManager>();
+            obj.AddComponent<SceneManager>();
             obj.AddComponent<AttackTimer>();
 
             var harmony = new Harmony(GUID);
