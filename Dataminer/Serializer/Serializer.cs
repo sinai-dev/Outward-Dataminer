@@ -48,25 +48,6 @@ namespace Dataminer
         }
 
         private static Assembly m_DMAssembly; 
-        
-        /// <summary>
-        /// The Assembly-Csharp.dll AppDomain reference.
-        /// </summary>
-        public static Assembly Game_Assembly
-        {
-            get
-            {
-                if (m_gameAssembly == null)
-                {
-                    m_gameAssembly = AppDomain.CurrentDomain.GetAssemblies().First(x => x.FullName == m_gameAssemblyFullName);
-                }
-
-                return m_gameAssembly;
-            }
-        }
-
-        private const string m_gameAssemblyFullName = "Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
-        private static Assembly m_gameAssembly;
 
         /// <summary>
         /// List of DM_Type classes (types marked as DM_Serialized).
@@ -102,15 +83,29 @@ namespace Dataminer
 
         private static Type[] m_dmTypes;
 
-        public static Type GetBestDMType(Type type)
+        private static readonly Dictionary<string, Type> m_typeCache = new Dictionary<string, Type>();
+
+        public static Type GetBestDMType(Type _gameType, string name = "")
         {
-            if (GetDMType(type, false) is Type slType)
+            if (string.IsNullOrEmpty(name))
             {
-                return slType;
+                name = $"Dataminer.DM_{_gameType.Name}";
+            }
+
+            if (!m_typeCache.ContainsKey(name))
+            {
+                if (GetDMType(_gameType, false) is Type slType)
+                {
+                    return slType;
+                }
+                else
+                {
+                    return GetBestDMType(_gameType.BaseType, name);
+                }
             }
             else
             {
-                return GetBestDMType(type.BaseType);
+                return m_typeCache[name];
             }
         }
 
@@ -123,52 +118,36 @@ namespace Dataminer
         {
             var name = $"Dataminer.DM_{_gameType.Name}";
 
-            Type t = null;
-            try
+            if (!m_typeCache.ContainsKey(name))
             {
-                t = DM_Assembly.GetType(name);
-                if (t == null) throw new Exception("Null");
-            }
-            catch (Exception e)
-            {
-                if (logging)
+                Type t = null;
+                try
                 {
-                    Debug.LogWarning($"Could not get DM_Assembly Type '{name}'");
-                    Debug.LogWarning(e.Message);
-                    Debug.LogWarning(e.StackTrace);
-                }
-            }
+                    t = DM_Assembly.GetType(name);
 
-            return t;
+                    if (t == null) throw new Exception("Null");
+
+                    m_typeCache.Add(name, t);
+                }
+                catch (Exception e)
+                {
+                    if (logging)
+                    {
+                        Debug.LogWarning($"Could not get DM_Assembly Type '{name}'");
+                        Debug.LogWarning(e.Message);
+                        Debug.LogWarning(e.StackTrace);
+                    }
+                }
+
+                return t;
+            }
+            else
+            {
+                return m_typeCache[name];
+            }
         }
 
-        /// <summary>
-        /// Pass a Dataminer class type (eg, DM_Item) and get the corresponding Game class (eg, Item).
-        /// </summary>
-        /// <param name="_dmType">Eg, typeof(DM_Item)</param>
-        /// <param name="logging">If you want to log debug messages.</param>
-        public static Type GetGameType(Type _dmType, bool logging = true)
-        {
-            var name = _dmType.Name.Substring(3, _dmType.Name.Length - 3);
-
-            Type t = null;
-            try
-            {
-                t = Game_Assembly.GetType(name);
-                if (t == null) throw new Exception("Null");
-            }
-            catch (Exception e)
-            {
-                if (logging)
-                {
-                    Debug.LogWarning($"Could not get Game_Assembly Type '{name}'");
-                    Debug.LogWarning(e.Message);
-                    Debug.LogWarning(e.StackTrace);
-                }
-            }
-
-            return t;
-        }
+        private static readonly Dictionary<Type, XmlSerializer> m_serializerCache = new Dictionary<Type, XmlSerializer>();
 
         /// <summary>
         /// Save an DM_Type object to xml.
@@ -192,58 +171,22 @@ namespace Dataminer
                 File.Delete(path);
             }
 
-            XmlSerializer xml = new XmlSerializer(obj.GetType(), DMTypes);
-            FileStream file = File.Create(path);
-            xml.Serialize(file, obj);
-            file.Close();
-        }
+            var type = obj.GetType();
 
-        /// <summary>
-        /// Load an DM_Type object from XML.
-        /// </summary>
-        public static object LoadFromXml(string path)
-        {
-            if (!File.Exists(path))
+            XmlSerializer xml;
+            if (m_serializerCache.ContainsKey(type))
             {
-                Debug.Log("LoadFromXml :: Trying to load an XML but path doesnt exist: " + path);
-                return null;
-            }
-
-            // First we have to find out what kind of Type this xml was serialized as.
-            string typeName = "";
-            using (XmlReader reader = XmlReader.Create(path))
-            {
-                while (reader.Read()) // just get the first element (root) then break.
-                {
-                    if (reader.NodeType == XmlNodeType.Element)
-                    {
-                        // the real type might be saved as an attribute
-                        if (!string.IsNullOrEmpty(reader.GetAttribute("type")))
-                        {
-                            typeName = reader.GetAttribute("type");
-                        }
-                        else
-                        {
-                            typeName = reader.Name;
-                        }
-                        break;
-                    }
-                }
-            }
-
-            if (!string.IsNullOrEmpty(typeName) && DM_Assembly.GetType($"Dataminer.{typeName}") is Type type)
-            {
-                XmlSerializer xml = new XmlSerializer(type, DMTypes);
-                FileStream file = File.OpenRead(path);
-                var obj = xml.Deserialize(file);
-                file.Close();
-                return obj;
+                xml = m_serializerCache[type];
             }
             else
             {
-                Debug.Log("LoadFromXml Error, could not serialize the Type of document! typeName: " + typeName);
-                return null;
+                xml = new XmlSerializer(type, DMTypes);
+                m_serializerCache.Add(type, xml);
             }
+            
+            FileStream file = File.Create(path);
+            xml.Serialize(file, obj);
+            file.Close();
         }
 
         /// <summary>Remove invalid filename characters from a string</summary>

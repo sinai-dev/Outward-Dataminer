@@ -31,6 +31,7 @@ namespace Dataminer
             NewDump = Serializer.Folders.MakeFolders();
         }
 
+        // calls Dump()
         [HarmonyPatch(typeof(ResourcesPrefabManager), "Load")]
         public class RPM_Load
         {
@@ -44,6 +45,7 @@ namespace Dataminer
             }
         }
 
+        // calls DM_Localization.SaveLocalization()
         [HarmonyPatch(typeof(LocalizationManager), "Load")]
         public class LocalizationManager_Load
         {
@@ -56,7 +58,7 @@ namespace Dataminer
                 {
                     if (loc.DefaultName == "English")
                     {
-                        LocalizationHolder.SaveLocalization(loc);
+                        DM_Localization.SaveLocalization(loc);
                     }
                 }
             }

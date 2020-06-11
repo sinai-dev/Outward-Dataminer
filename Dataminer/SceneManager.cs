@@ -64,15 +64,15 @@ namespace Dataminer
 
                     yield return new WaitForSeconds(5f);
 
-                    while (NetworkLevelLoader.Instance.IsGameplayPaused)
+                    while (NetworkLevelLoader.Instance.IsGameplayPaused || NetworkLevelLoader.Instance.InLoading)
                     {
                         NetworkLevelLoader loader = NetworkLevelLoader.Instance;
                         At.SetValue(true, typeof(NetworkLevelLoader), loader, "m_continueAfterLoading");
-                        MenuManager.Instance.HideMasterLoadingScreen();
 
                         yield return new WaitForSeconds(1f);
                     }
                     yield return new WaitForSeconds(2f);
+                    MenuManager.Instance.HideMasterLoadingScreen();
                 }
 
                 /*        Parse Scene        */

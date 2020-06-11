@@ -245,6 +245,7 @@
     <Compile Include="Serializer\Loot\DM_ItemSpawn.cs" />
     <Compile Include="Serializer\Loot\DM_LootContainer.cs" />
     <Compile Include="Serializer\Scene\SceneSummary.cs" />
+    <Compile Include="Serializer\Status\DM_Disease.cs" />
     <Compile Include="Serializer\Status\DM_ImbueEffect.cs" />
     <Compile Include="Serializer\Status\DM_StatusEffect.cs" />
     <Compile Include="util\AccessTools.cs" />

@@ -12,7 +12,7 @@ namespace Dataminer
 {
     // This class is used to parse the original Localizations to custom XML holders, and these are used for saving the user's custom locs too.
 
-    public class LocalizationHolder
+    public class DM_Localization
     {
         public string Name;
         public string DefaultName;
@@ -25,7 +25,7 @@ namespace Dataminer
         // save orig XML
         public static void SaveLocalization(LocalizationReference.Localization loc)
         {
-            var locHolder = new LocalizationHolder
+            var locHolder = new DM_Localization
             {
                 Name = loc.Name,
                 DefaultName = loc.DefaultName

@@ -50,7 +50,7 @@ namespace Dataminer
 
                     try
                     {
-                        Debug.Log("Parsing " + item.Name + ", typeof: " + item.GetType());
+                        //Debug.Log("Parsing " + item.Name + ", typeof: " + item.GetType());
 
                         // Parse the item. This will recursively dive.
                         var itemHolder = ParseItemToTemplate(item);

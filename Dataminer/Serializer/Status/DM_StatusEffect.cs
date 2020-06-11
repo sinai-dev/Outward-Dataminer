@@ -11,13 +11,14 @@ namespace Dataminer
     [DM_Serialized]
     public class DM_StatusEffect
     {
-        public int StatusID;
-        public string StatusIdentifier;
+        public int PresetID;
+        public string Identifier;
 
         public string Name;
         public string Description;
 
         public float Lifespan;
+        public string LengthType;
         public float RefreshRate;
         
         public float BuildupRecoverySpeed;
@@ -42,11 +43,9 @@ namespace Dataminer
 
                 foreach (EffectPreset preset in dict.Values)
                 {
-                    var name = preset.name;
-                    Debug.Log(name);
-
                     if (preset is ImbueEffectPreset imbuePreset)
                     {
+                        var name = imbuePreset.Name;
                         var template = DM_ImbueEffect.ParseImbueEffect(imbuePreset);
                         ListManager.ImbueEffects.Add(template.StatusID.ToString(), template);
                         Serializer.SaveToXml(dir, name, template);
@@ -57,11 +56,11 @@ namespace Dataminer
                         {
                             continue;
                         }
-
+                        var name = status.IdentifierName;
                         parsedIdentifiers.Add(status.IdentifierName);
 
                         var template = ParseStatusEffect(status);
-                        ListManager.Effects.Add(template.StatusID.ToString(), template);
+                        ListManager.Effects.Add(template.PresetID.ToString(), template);
                         Serializer.SaveToXml(dir, name, template);
                     }
                 }
@@ -78,7 +77,7 @@ namespace Dataminer
 
                 foreach (var status in statusDict.Values)
                 {
-                    Debug.Log(status.name);
+                    //Debug.Log(status.name);
 
                     if (string.IsNullOrEmpty(status.IdentifierName) || parsedIdentifiers.Contains(status.IdentifierName))
                     {
@@ -89,14 +88,14 @@ namespace Dataminer
 
                     if (!string.IsNullOrEmpty(template.Name))
                     {
-                        if (template.StatusID == -1)
+                        if (template.PresetID == -1)
                         {
                             manualID++;
-                            template.StatusID = manualID;
+                            template.PresetID = manualID;
                         }
 
-                        ListManager.Effects.Add(template.StatusID.ToString(), template);
-                        Serializer.SaveToXml(dir, status.name, template);
+                        ListManager.Effects.Add(template.PresetID.ToString(), template);
+                        Serializer.SaveToXml(dir, status.IdentifierName, template);
                     }
                 }
             }
@@ -108,27 +107,33 @@ namespace Dataminer
 
             At.Call(typeof(StatusEffect), status, "OnAwake", null, new object[0]);
 
-            var template = new DM_StatusEffect()
-            {
-                StatusID = preset?.PresetID ?? -1,
-                StatusIdentifier = status.IdentifierName,
-                IgnoreBuildupIfApplied = status.IgnoreBuildUpIfApplied,
-                BuildupRecoverySpeed = status.BuildUpRecoverSpeed,
-                DisplayedInHUD = status.DisplayInHud,
-                IsHidden = status.IsHidden,
-                //LengthType = status.LengthType,
-                Lifespan = status.StatusData.LifeSpan,
-                RefreshRate = status.RefreshRate
-            };
+            var template = (DM_StatusEffect)Activator.CreateInstance(Serializer.GetBestDMType(status.GetType()));
 
-            GetStatusLocalization(status, out template.Name, out template.Description);
+            template.SerializeStatusEffect(status, preset);
 
-            template.Tags = new List<string>();
+            return template;
+        }
+
+        public virtual void SerializeStatusEffect(StatusEffect status, EffectPreset preset)
+        {
+            PresetID = preset?.PresetID ?? -1;
+            Identifier = status.IdentifierName;
+            IgnoreBuildupIfApplied = status.IgnoreBuildUpIfApplied;
+            BuildupRecoverySpeed = status.BuildUpRecoverSpeed;
+            DisplayedInHUD = status.DisplayInHud;
+            IsHidden = status.IsHidden;
+            Lifespan = status.StatusData.LifeSpan;
+            RefreshRate = status.RefreshRate;
+            LengthType = status.LengthType.ToString();
+
+            GetStatusLocalization(status, out Name, out Description);
+
+            Tags = new List<string>();
             status.InitTags();
             var tags = (List<Tag>)At.GetValue(typeof(StatusEffect), status, "m_tags");
             foreach (var tag in tags)
             {
-                template.Tags.Add(tag.TagName);
+                Tags.Add(tag.TagName);
             }
 
             // For existing StatusEffects, the StatusData contains the real values, so we need to SetValue to each Effect.
@@ -143,8 +148,8 @@ namespace Dataminer
                 }
             }
 
-            template.Effects = new List<DM_EffectTransform>();
-            
+            Effects = new List<DM_EffectTransform>();
+
             if (status.transform.childCount > 0)
             {
                 var signature = status.transform.GetChild(0);
@@ -156,13 +161,11 @@ namespace Dataminer
 
                         if (effectsChild.ChildEffects.Count > 0 || effectsChild.Effects.Count > 0 || effectsChild.EffectConditions.Count > 0)
                         {
-                            template.Effects.Add(effectsChild);
+                            Effects.Add(effectsChild);
                         }
                     }
                 }
             }
-
-            return template;
         }
 
         public static void GetStatusLocalization(StatusEffect effect, out string name, out string desc)

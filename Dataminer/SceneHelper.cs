@@ -33,7 +33,7 @@ namespace Dataminer
                     case "Enmerkar Forest":
                         list = EnmerkarDungeons.Keys.ToList();
                         break;
-                    case "Antique Fields":
+                    case "Antique Plateau":
                         list = AntiqueDungeons.Keys.ToList();
                         break;
                     default:

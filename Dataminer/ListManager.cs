@@ -231,7 +231,7 @@ namespace Dataminer
             List<string> EffectsTable = new List<string>();
             foreach (var entry in Effects)
             {
-                EffectsTable.Add(entry.Key + "	" + entry.Value.Name);
+                EffectsTable.Add(entry.Key + "	" + entry.Value.Identifier);
             }
             foreach (var entry in ImbueEffects)
             {
