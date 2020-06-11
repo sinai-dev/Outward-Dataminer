@@ -13,8 +13,8 @@ namespace Dataminer
     {
         public string Name;
 
-        public List<DM_DropTableEntry> Guaranteed_Drops = new List<DM_DropTableEntry>();
-        public List<DM_ItemGenerator> Random_Tables = new List<DM_ItemGenerator>();
+        public List<DropTableEntry> Guaranteed_Drops = new List<DropTableEntry>();
+        public List<DropGeneratorHolder> Random_Tables = new List<DropGeneratorHolder>();
 
         public static DM_DropTable ParseDropTable(Dropable dropper, Merchant merchant = null, string containerName = "")
         {
@@ -53,7 +53,7 @@ namespace Dataminer
             {
                 foreach (DropTable table in dropTables)
                 {
-                    var generatorHolder = new DM_ItemGenerator
+                    var generatorHolder = new DropGeneratorHolder
                     {
                         MinNumberOfDrops = table.MinNumberOfDrops,
                         MaxNumberOfDrops = table.MaxNumberOfDrops,
@@ -92,7 +92,7 @@ namespace Dataminer
 
                             percentage = (float)Math.Round(percentage, 2);
 
-                            generatorHolder.Item_Drops.Add(new DM_ChanceEntry
+                            generatorHolder.Item_Drops.Add(new DropTableChanceEntry
                             {
                                 Item_ID = dropChance.DroppedItem.ItemID,
                                 Item_Name = dropChance.DroppedItem.Name,
@@ -162,7 +162,7 @@ namespace Dataminer
         {
             // check if we already have this guaranteed drop, if so add to quantity
             bool newDrop = true;
-            foreach (DM_DropTableEntry gDropHolder in dropTableHolder.Guaranteed_Drops)
+            foreach (DropTableEntry gDropHolder in dropTableHolder.Guaranteed_Drops)
             {
                 if (item_ID == gDropHolder.Item_ID)
                 {
@@ -173,7 +173,7 @@ namespace Dataminer
             }
             if (newDrop)
             {
-                dropTableHolder.Guaranteed_Drops.Add(new DM_DropTableEntry
+                dropTableHolder.Guaranteed_Drops.Add(new DropTableEntry
                 {
                     Item_Name = item_Name,
                     Item_ID = item_ID,
@@ -188,7 +188,7 @@ namespace Dataminer
             }
         }
 
-        public class DM_ItemGenerator
+        public class DropGeneratorHolder
         {
             public int MinNumberOfDrops;
             public int MaxNumberOfDrops;
@@ -199,7 +199,7 @@ namespace Dataminer
             public int ChanceReduction;
             public int ChanceRegenQty;
 
-            public List<DM_ChanceEntry> Item_Drops = new List<DM_ChanceEntry>();
+            public List<DropTableChanceEntry> Item_Drops = new List<DropTableChanceEntry>();
         }
     }
 }

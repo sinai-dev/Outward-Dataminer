@@ -6,7 +6,7 @@ using System.Text;
 namespace Dataminer
 {
     [DM_Serialized]
-    public class DM_Quantity
+    public class QuantityHolder
     {
         public string Name;
         public int Quantity;

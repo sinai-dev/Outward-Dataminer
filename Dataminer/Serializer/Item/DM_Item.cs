@@ -33,6 +33,9 @@ namespace Dataminer
         public float MobileCastMovementMult;
         public int CastSheatheRequired;
 
+        // for Perishable ItemExtension
+        public string PerishTime;
+
         public List<string> Tags = new List<string>();
         public DM_ItemStats StatsHolder;
         public List<DM_EffectTransform> EffectTransforms = new List<DM_EffectTransform>();   
@@ -100,6 +103,18 @@ namespace Dataminer
             holder.MobileCastMovementMult = item.MobileCastMovementMult;
             holder.RepairedInRest = item.RepairedInRest;
             holder.BehaviorOnNoDurability = item.BehaviorOnNoDurability;
+
+            if (item.GetComponent<Perishable>() is Perishable perish)
+            {
+                float perishRate = perish.DepletionRate * 0.03333333f;
+                float perishModifier = 1 / perishRate;
+
+                var remainingTicks = item.MaxDurability * perishModifier; // est game time in seconds
+                var minutes = remainingTicks * 2;
+                TimeSpan t = TimeSpan.FromMinutes(minutes);
+
+                holder.PerishTime = $"{t.Days} Days, {t.Hours} Hours, {t.Minutes} Minutes, {t.Seconds} Seconds";
+            }
 
             holder.CastType = (Character.SpellCastType)At.GetValue(typeof(Item), item, "m_activateEffectAnimType");
 

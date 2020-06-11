@@ -6,7 +6,7 @@ using System.Text;
 namespace Dataminer
 {
     [DM_Serialized]
-    public class DM_DropTableEntry
+    public class DropTableEntry
     {
         public string Item_Name;
         public int Item_ID;
@@ -16,7 +16,7 @@ namespace Dataminer
     }
 
     [DM_Serialized]
-    public class DM_ChanceEntry : DM_DropTableEntry
+    public class DropTableChanceEntry : DropTableEntry
     {
         public float Drop_Chance;
         public int Dice_Range;

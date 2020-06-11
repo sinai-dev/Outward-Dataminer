@@ -11,7 +11,7 @@ namespace Dataminer
         public string Name;
         public int ItemID;
 
-        public List<DM_Quantity> All_Locations = new List<DM_Quantity>();
+        public List<QuantityHolder> All_Locations = new List<QuantityHolder>();
         public List<DroptableSummary> DropTables = new List<DroptableSummary>();
     }
 }

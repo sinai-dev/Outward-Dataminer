@@ -87,7 +87,7 @@ namespace Dataminer
                 }
                 if (addLocation)
                 {
-                    summary.All_Locations.Add(new DM_Quantity
+                    summary.All_Locations.Add(new QuantityHolder
                     {
                         Name = location,
                         Quantity = 1
@@ -99,9 +99,9 @@ namespace Dataminer
                 ContainerSummaries.Add(name, new LootContainerSummary
                 {
                     Name = name,
-                    All_Locations = new List<DM_Quantity>
+                    All_Locations = new List<QuantityHolder>
                     {
-                        new DM_Quantity
+                        new QuantityHolder
                         {
                             Name = location,
                             Quantity = 1

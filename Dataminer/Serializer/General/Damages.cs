@@ -6,12 +6,12 @@ using System.Text;
 namespace Dataminer
 {
     [DM_Serialized]
-    public class DM_Damage
+    public class Damages
     {
         public float Damage = 0f;
-        public DamageType.Types Type = DamageType.Types.Count;
+        public DamageType.Types Damage_Type = DamageType.Types.Count;
 
-        public static DamageList GetDamageList(List<DM_Damage> list)
+        public static DamageList GetDamageList(List<Damages> list)
         {
             var newlist = new DamageList();
             foreach (var entry in list)
@@ -24,14 +24,14 @@ namespace Dataminer
 
         public DamageType GetDamageType()
         {
-            return new DamageType(this.Type, this.Damage);
+            return new DamageType(this.Damage_Type, this.Damage);
         }
 
         // --------- from game class to our holder ----------
 
-        public static List<DM_Damage> ParseDamageList(DamageList list)
+        public static List<Damages> ParseDamageList(DamageList list)
         {
-            var damages = new List<DM_Damage>();
+            var damages = new List<Damages>();
 
             foreach (DamageType type in list.List)
             {
@@ -41,9 +41,9 @@ namespace Dataminer
             return damages;
         }
 
-        public static List<DM_Damage> ParseDamageArray(DamageType[] types)
+        public static List<Damages> ParseDamageArray(DamageType[] types)
         {
-            List<DM_Damage> damages = new List<DM_Damage>();
+            List<Damages> damages = new List<Damages>();
 
             foreach (DamageType type in types)
             {
@@ -53,12 +53,12 @@ namespace Dataminer
             return damages;
         }
 
-        public static DM_Damage ParseDamageType(DamageType damage)
+        public static Damages ParseDamageType(DamageType damage)
         {
-            return new DM_Damage
+            return new Damages
             {
                 Damage = damage.Damage,
-                Type = damage.Type
+                Damage_Type = damage.Type
             };
         }
     }

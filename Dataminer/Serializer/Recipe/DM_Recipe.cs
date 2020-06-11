@@ -17,7 +17,7 @@ namespace Dataminer
 
         public Recipe.CraftingType StationType = Recipe.CraftingType.Survival;
 
-        public List<Ingredient> Ingredients = new List<Ingredient>();
+        public List<string> Ingredients = new List<string>();
         public List<ItemQty> Results = new List<ItemQty>();
 
         public static void ParseAllRecipes()
@@ -50,19 +50,21 @@ namespace Dataminer
             {
                 if (ingredient.ActionType == RecipeIngredient.ActionTypes.AddSpecificIngredient)
                 {
-                    recipeHolder.Ingredients.Add(new Ingredient() 
-                    {
-                        Type = ingredient.ActionType,
-                        Ingredient_ItemID = ingredient.AddedIngredient.ItemID
-                    });
+                    recipeHolder.Ingredients.Add(ingredient.AddedIngredient.Name);
+                    //recipeHolder.Ingredients.Add(new Ingredient() 
+                    //{
+                    //    Type = ingredient.ActionType,
+                    //    Ingredient_ItemID = ingredient.AddedIngredient.ItemID
+                    //});
                 }
                 else
                 {
-                    recipeHolder.Ingredients.Add(new Ingredient() 
-                    {
-                        Type = ingredient.ActionType,
-                        Ingredient_Tag = ingredient.AddedIngredientType.Tag.TagName
-                    });
+                    recipeHolder.Ingredients.Add(ingredient.AddedIngredientType.Tag.TagName);
+                    //recipeHolder.Ingredients.Add(new Ingredient() 
+                    //{
+                    //    Type = ingredient.ActionType,
+                    //    Ingredient_Tag = ingredient.AddedIngredientType.Tag.TagName
+                    //});
                 }
             }
 

@@ -9,7 +9,7 @@ namespace Dataminer
     public class DM_WeaponStats : DM_EquipmentStats
     {
         public float AttackSpeed;
-        public List<DM_Damage> BaseDamage;
+        public List<Damages> BaseDamage;
         public float Impact;
         public float StamCost;
 
@@ -29,7 +29,7 @@ namespace Dataminer
             template.Impact = wStats.Impact;
             template.StamCost = wStats.StamCost;
 
-            template.BaseDamage = DM_Damage.ParseDamageList(wStats.BaseDamage);
+            template.BaseDamage = Damages.ParseDamageList(wStats.BaseDamage);
         }
 
         public static WeaponStats.AttackData[] GetScaledAttackData(Weapon weapon)

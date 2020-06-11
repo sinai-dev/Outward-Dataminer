@@ -282,10 +282,10 @@ namespace Dataminer
         //    }
         //}
 
-        private static void AddQuantity(string name, List<DM_Quantity> list)
+        private static void AddQuantity(string name, List<QuantityHolder> list)
         {
             bool newEntry = true;
-            foreach (DM_Quantity holder in list)
+            foreach (QuantityHolder holder in list)
             {
                 if (holder.Name == name)
                 {
@@ -296,7 +296,7 @@ namespace Dataminer
             }
             if (newEntry)
             {
-                list.Add(new DM_Quantity
+                list.Add(new QuantityHolder
                 {
                     Name = name,
                     Quantity = 1

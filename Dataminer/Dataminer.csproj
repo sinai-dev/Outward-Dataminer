@@ -216,8 +216,8 @@
     <Compile Include="Serializer\Effect\Effects\DM_UseLoadoutAmmunition.cs" />
     <Compile Include="Serializer\Effect\Effects\DM_VitalityDamage.cs" />
     <Compile Include="Serializer\Effect\Effects\DM_WeaponDamage.cs" />
-    <Compile Include="Serializer\General\DM_Damage.cs" />
-    <Compile Include="Serializer\General\DM_Quantity.cs" />
+    <Compile Include="Serializer\General\Damages.cs" />
+    <Compile Include="Serializer\General\QuantityHolder.cs" />
     <Compile Include="Serializer\Item\DM_Item.cs" />
     <Compile Include="Serializer\Item\DM_Armor.cs" />
     <Compile Include="Serializer\Item\DM_Bag.cs" />
@@ -239,7 +239,7 @@
     <Compile Include="Serializer\Recipe\DM_Recipe.cs" />
     <Compile Include="Serializer\Scene\DroptableSummary.cs" />
     <Compile Include="Serializer\Scene\LootContainerSummary.cs" />
-    <Compile Include="Serializer\Loot\DropTable\DM_DropTableEntry.cs" />
+    <Compile Include="Serializer\Loot\DropTable\DropTableEntry.cs" />
     <Compile Include="Serializer\Loot\DM_DropTable.cs" />
     <Compile Include="Serializer\Loot\DM_Gatherable.cs" />
     <Compile Include="Serializer\Loot\DM_ItemSpawn.cs" />

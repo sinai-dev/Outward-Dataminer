@@ -8,8 +8,8 @@ namespace Dataminer
 {
     public class DM_PunctualDamage : DM_Effect
     {
-        public List<DM_Damage> Damage = new List<DM_Damage>();
-        public List<DM_Damage> Damages_AI = new List<DM_Damage>();
+        public List<Damages> Damage = new List<Damages>();
+        public List<Damages> Damages_AI = new List<Damages>();
         public float Knockback;
         public bool HitInventory;
 
@@ -20,8 +20,8 @@ namespace Dataminer
 
             puncHolder.Knockback = puncDamage.Knockback;
             puncHolder.HitInventory = puncDamage.HitInventory;
-            puncHolder.Damage = DM_Damage.ParseDamageArray(puncDamage.Damages);
-            puncHolder.Damages_AI = DM_Damage.ParseDamageArray(puncDamage.DamagesAI);
+            puncHolder.Damage = Damages.ParseDamageArray(puncDamage.Damages);
+            puncHolder.Damages_AI = Damages.ParseDamageArray(puncDamage.DamagesAI);
         }
     }
 }

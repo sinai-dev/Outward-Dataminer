@@ -10,11 +10,11 @@ namespace Dataminer
     {
         public string SceneName;
 
-        public List<DM_Quantity> Enemies = new List<DM_Quantity>();
+        public List<QuantityHolder> Enemies = new List<QuantityHolder>();
         public List<string> Merchants = new List<string>();
 
-        public List<DM_Quantity> Loot_Containers = new List<DM_Quantity>();
-        public List<DM_Quantity> Gatherables = new List<DM_Quantity>();
+        public List<QuantityHolder> Loot_Containers = new List<QuantityHolder>();
+        public List<QuantityHolder> Gatherables = new List<QuantityHolder>();
         public List<DM_ItemSpawn> Item_Spawns = new List<DM_ItemSpawn>();
 
         public List<string> UniqueContainerList = new List<string>();

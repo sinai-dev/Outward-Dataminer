@@ -25,7 +25,7 @@ namespace Dataminer
         public float[] Damage_Bonuses;
         public float Collider_Radius;
 
-        public List<DM_Damage> True_WeaponDamage = new List<DM_Damage>();
+        public List<Damages> True_WeaponDamage = new List<Damages>();
         public float Weapon_Impact;
 
         public List<string> Status_Immunities = new List<string>();
@@ -36,7 +36,7 @@ namespace Dataminer
         public string Faction;
         public bool Allied_To_Same_Faction;
 
-        public List<DM_DropTableEntry> Guaranteed_Drops = new List<DM_DropTableEntry>();
+        public List<DropTableEntry> Guaranteed_Drops = new List<DropTableEntry>();
         public List<string> DropTable_Names = new List<string>();
 
         public static void ParseAllEnemies()
@@ -57,7 +57,7 @@ namespace Dataminer
                     // add to scene summary
                     string saveName = enemyHolder.Name + " (" + enemyHolder.Unique_ID + ")";
                     bool found = false;
-                    foreach (DM_Quantity holder in summary.Enemies)
+                    foreach (QuantityHolder holder in summary.Enemies)
                     {
                         if (holder.Name == saveName)
                         {
@@ -69,7 +69,7 @@ namespace Dataminer
                     }
                     if (!found)
                     {
-                        summary.Enemies.Add(new DM_Quantity
+                        summary.Enemies.Add(new QuantityHolder
                         {
                             Name = saveName,
                             Quantity = 1
@@ -354,7 +354,7 @@ namespace Dataminer
         // Add to guaranteed drops
         private static void AddGuaranteedDrop(DM_Enemy holder, int id, string name, int qty, int maxQty = -1, bool cumulative = false)
         {
-            foreach (DM_DropTableEntry entry in holder.Guaranteed_Drops)
+            foreach (DropTableEntry entry in holder.Guaranteed_Drops)
             {
                 if (entry.Item_ID == id)
                 {
@@ -367,7 +367,7 @@ namespace Dataminer
                 }
             }
 
-            holder.Guaranteed_Drops.Add(new DM_DropTableEntry
+            holder.Guaranteed_Drops.Add(new DropTableEntry
             {
                 Item_ID = id,
                 Item_Name = name,
@@ -395,7 +395,7 @@ namespace Dataminer
                         list[(DamageType.Types)i].Damage = (float)Math.Round(list[(DamageType.Types)i].Damage, 2);
                     }
                 }
-                holder.True_WeaponDamage = DM_Damage.ParseDamageList(list);
+                holder.True_WeaponDamage = Damages.ParseDamageList(list);
             }
             else
             {
