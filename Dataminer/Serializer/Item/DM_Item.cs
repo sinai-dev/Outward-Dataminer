@@ -46,11 +46,6 @@ namespace Dataminer
             {
                 foreach (Item item in ItemPrefabs.Values)
                 {
-                    if (item && item.ItemID < 2000000)
-                    {
-                        continue;
-                    }
-
                     try
                     {
                         //Debug.Log("Parsing " + item.Name + ", typeof: " + item.GetType());
