@@ -100,7 +100,21 @@ namespace Dataminer
             { "EmercarDungeonsSmall", "Enmerkar Misc. Dungeons" },
             { "EmercarDungeonsBosses", "Unknown Arena" },
             { "DreamWorld", "In Between" },
-            // TODO ANTIQUE FIELDS SCENES
+            // ANTIQUE PLATEAU
+            // { "?", "Harmattan" },
+            // { "?", "Antique Plateau" },
+            // { "?", "Abandoned Living Quarters" },
+            // { "?", "Forgotten Research Laboratory" },
+            // { "?", "Ancient Golem Foundry" },
+            // { "?", "Ruined Golem Warehouse" },
+            // { "?", "Lost Golem Manufacturing Facility" }
+            // { "?", "Crumbling Loading Docks" },
+            // { "?", "Destroyed Test Chambers" },
+            // { "?", "Compromised Mana Transfer Station" },
+            // { "?", "Old Harmattan" },
+            // { "?", "Drifting Dreamscape" },
+            // { "HarmattanDungeonsBosses", "Unknown Arena" },
+            // { "HarmattanMiscDungeons", "Harmattan Misc. Dungeons" }
         };
 
         public static Dictionary<string, List<string>> ScenesByRegion = new Dictionary<string, List<string>>
@@ -170,10 +184,21 @@ namespace Dataminer
                 }
             },
             {
-                "Antique Fields",
+                "Antique Plateau",
                 new List<string>
                 {
-                    // TODO ANTIQUE FIELDS NAMES
+                    "Harmattan",
+                    "Antique Plateau",
+                    "Abandoned Living Quarters",
+                    "Forgotten Research Laboratory",
+                    "Ancient Golem Foundry",
+                    "Ruined Golem Warehouse",
+                    "Lost Golem Manufacturing Facility",
+                    "Crumbling Loading Docks",
+                    "Destroyed Test Chambers",
+                    "Compromised Mana Transfer Station",
+                    "Old Harmattan",
+                    "Drifting Dreamscape"
                 }
             },
             {
@@ -239,6 +264,14 @@ namespace Dataminer
         public static Dictionary<string, Vector3> AntiqueDungeons = new Dictionary<string, Vector3>
         {
             { "Unknown", new Vector3(0, 0, 0) },
+            // { "Blood Mage Hideout", new Vector3(0, 0, 0)},
+            // { "Wendigo Lair, new Vector3(0, 0, 0)},
+            // { "Troglodyte Warren, new Vector3(0, 0, 0)},
+            // { "Bandit Hideout, new Vector3(0, 0, 0)},
+            // { "Abandoned Storage, new Vector3(0, 0, 0)},
+            // { "Old Harmattan Basement, new Vector3(0, 0, 0)},
+            // { "Corrupted Cave, new Vector3(0, 0, 0)},
+            // { "Immaculate's Camp, new Vector3(0, 0, 0)}
         };
     }
 }

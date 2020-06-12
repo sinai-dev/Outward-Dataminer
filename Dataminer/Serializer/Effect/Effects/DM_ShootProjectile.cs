@@ -34,8 +34,8 @@ namespace Dataminer
         public float DefenseLength;
         public float DefenseRange;
 
-        public int PhysicsLayerMask;
-        public bool OnlyExplodeOnLayerMask;
+        //public int PhysicsLayerMask;
+        //public bool OnlyExplodeOnLayerMask;
 
         public EquipmentSoundMaterials ImpactSoundMaterial;
         public Vector2 LightIntensityFade;
@@ -74,8 +74,8 @@ namespace Dataminer
                 template.DisableOnHit = projectile.DisableOnHit;
                 template.EffectsOnlyIfHitCharacter = projectile.EffectsOnlyIfHitCharacter;
                 template.EndMode = projectile.EndMode;
-                template.OnlyExplodeOnLayerMask = projectile.OnlyExplodeOnLayers;
-                template.PhysicsLayerMask = projectile.ExplodeOnContactWithLayers.value;
+                //template.OnlyExplodeOnLayerMask = projectile.OnlyExplodeOnLayers;
+                //template.PhysicsLayerMask = projectile.ExplodeOnContactWithLayers.value;
                 template.ImpactSoundMaterial = projectile.ImpactSoundMaterial;
                 template.LateShootTime = projectile.LateShootTime;
                 template.Lifespan = projectile.Lifespan;
