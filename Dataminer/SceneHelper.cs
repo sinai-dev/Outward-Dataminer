@@ -101,7 +101,7 @@ namespace Dataminer
             { "EmercarDungeonsBosses",              "Unknown Arena" },
             { "DreamWorld",                         "In Between" },
             // ANTIQUE PLATEAU
-            // { "?",                               "Harmattan" },
+            // { "Harmattan",                       "Harmattan" },
             // { "?",                               "Antique Plateau" },
             // { "?",                               "Abandoned Living Quarters" },
             // { "?",                               "Forgotten Research Laboratory" },
