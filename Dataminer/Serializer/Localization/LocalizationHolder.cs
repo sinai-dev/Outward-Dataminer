@@ -12,20 +12,20 @@ namespace Dataminer
 {
     // This class is used to parse the original Localizations to custom XML holders, and these are used for saving the user's custom locs too.
 
-    public class DM_Localization
+    public class LocalizationHolder
     {
         public string Name;
         public string DefaultName;
 
-        public List<DM_ItemLoc> ItemLocalizations = new List<DM_ItemLoc>();
-        public List<DM_DialogueLoc> DialogueLocalizations = new List<DM_DialogueLoc>();
-        public List<DM_Loc> MenuLocalizations = new List<DM_Loc>();
-        public List<DM_Loc> LoadingTipsLocalization = new List<DM_Loc>();
+        public List<ItemLocalizationHolder> ItemLocalizations = new List<ItemLocalizationHolder>();
+        public List<DialogueLocalizationHolder> DialogueLocalizations = new List<DialogueLocalizationHolder>();
+        public List<LocalizationEntryHolder> MenuLocalizations = new List<LocalizationEntryHolder>();
+        public List<LocalizationEntryHolder> LoadingTipsLocalization = new List<LocalizationEntryHolder>();
 
         // save orig XML
         public static void SaveLocalization(LocalizationReference.Localization loc)
         {
-            var locHolder = new DM_Localization
+            var locHolder = new LocalizationHolder
             {
                 Name = loc.Name,
                 DefaultName = loc.DefaultName
@@ -42,7 +42,7 @@ namespace Dataminer
         }
 
         // Parse Menu XML (load from game data)
-        public static List<DM_Loc> LoadMenu(TextAsset[] array)
+        public static List<LocalizationEntryHolder> LoadMenu(TextAsset[] array)
         {
             var dict = new Dictionary<string, string>();
 
@@ -77,11 +77,11 @@ namespace Dataminer
                 }
             }
 
-            var list = new List<DM_Loc>();
+            var list = new List<LocalizationEntryHolder>();
 
             foreach (var entry in dict)
             {
-                list.Add(new DM_Loc
+                list.Add(new LocalizationEntryHolder
                 {
                     Key = entry.Key,
                     Value = entry.Value
@@ -92,7 +92,7 @@ namespace Dataminer
         }
 
         // Parse Tips XML (load from game data)
-        public static List<DM_Loc> LoadTips(TextAsset asset)
+        public static List<LocalizationEntryHolder> LoadTips(TextAsset asset)
         {
             var dict = new Dictionary<string, string>();
 
@@ -121,11 +121,11 @@ namespace Dataminer
                 }
             }
 
-            var list = new List<DM_Loc>();
+            var list = new List<LocalizationEntryHolder>();
 
             foreach (var entry in dict)
             {
-                list.Add(new DM_Loc
+                list.Add(new LocalizationEntryHolder
                 {
                     Key = entry.Key,
                     Value = entry.Value
@@ -136,9 +136,9 @@ namespace Dataminer
         }
 
         // Parse Items XML (load from game data)
-        public static List<DM_ItemLoc> LoadItems(TextAsset[] array)
+        public static List<ItemLocalizationHolder> LoadItems(TextAsset[] array)
         {
-            var dict = new Dictionary<int, DM_ItemLoc>();
+            var dict = new Dictionary<int, ItemLocalizationHolder>();
 
             XmlDocument xmlDocument = new XmlDocument();
 
@@ -157,7 +157,7 @@ namespace Dataminer
                         string name = (node["column_2"] == null) ? string.Empty : node["column_2"].InnerText;
                         string desc = (node["column_3"] == null) ? string.Empty : node["column_3"].InnerText;
 
-                        dict.Add(key, new DM_ItemLoc
+                        dict.Add(key, new ItemLocalizationHolder
                         {
                             Name = name,
                             Desc = desc.Replace("\n\n", "\n")
@@ -166,11 +166,11 @@ namespace Dataminer
                 }
             }
 
-            var list = new List<DM_ItemLoc>();
+            var list = new List<ItemLocalizationHolder>();
 
             foreach (var entry in dict)
             {
-                list.Add(new DM_ItemLoc
+                list.Add(new ItemLocalizationHolder
                 {
                     KeyID = entry.Key,
                     Name = entry.Value.Name,
@@ -182,9 +182,9 @@ namespace Dataminer
         }
 
         // Parse Dialogue XML (load from game data)
-        public static List<DM_DialogueLoc> LoadDialogue(TextAsset[] array)
+        public static List<DialogueLocalizationHolder> LoadDialogue(TextAsset[] array)
         {
-            var dict = new Dictionary<string, DM_DialogueLoc>();
+            var dict = new Dictionary<string, DialogueLocalizationHolder>();
 
             XmlDocument xmlDocument = new XmlDocument();
 
@@ -212,7 +212,7 @@ namespace Dataminer
 
                                 if (!string.IsNullOrEmpty(key) && key != "loc_key" && !dict.ContainsKey(key))
                                 {
-                                    dict.Add(key, new DM_DialogueLoc
+                                    dict.Add(key, new DialogueLocalizationHolder
                                     {
                                         Key = key,
                                         General = general,
@@ -233,7 +233,7 @@ namespace Dataminer
     }
 
     [DM_Serialized]
-    public class DM_ItemLoc
+    public class ItemLocalizationHolder
     {
         public int KeyID;
         public string Name;
@@ -241,7 +241,7 @@ namespace Dataminer
     }
 
     [DM_Serialized]
-    public class DM_DialogueLoc
+    public class DialogueLocalizationHolder
     {
         public string Key;
         public string General;
@@ -252,7 +252,7 @@ namespace Dataminer
     }
 
     [DM_Serialized]
-    public class DM_Loc
+    public class LocalizationEntryHolder
     {
         public string Key;
         public string Value;

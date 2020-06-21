@@ -162,7 +162,7 @@ namespace Dataminer
                 dir += "/";
             }
 
-            saveName = ReplaceInvalidChars(saveName);
+            saveName = SafeName(saveName);
 
             string path = dir + saveName + ".xml";
             if (File.Exists(path))
@@ -190,9 +190,9 @@ namespace Dataminer
         }
 
         /// <summary>Remove invalid filename characters from a string</summary>
-        public static string ReplaceInvalidChars(string s)
+        public static string SafeName(string s)
         {
-            return string.Join("_", s.Split(Path.GetInvalidFileNameChars()));
+            return string.Join("_", s.Split(Path.GetInvalidFileNameChars())).Trim();
         }
 
         /// <summary>
@@ -226,6 +226,8 @@ namespace Dataminer
 
             /// <summary>The folder for recipes, 'Outward\Dataminer\Prefabs\Recipes'</summary>
             public const string Recipes = Prefabs + @"\Recipes";
+
+            public const string Enchantments = Recipes + @"\Enchantments";
 
             /// <summary>The folder for drop tables prefabs, 'Outward\Dataminer\Prefabs\DropTables\'</summary>
             public const string DropTables = Prefabs + @"\DropTables";

@@ -33,6 +33,7 @@ namespace Dataminer
         public static Dictionary<string, DM_ImbueEffect> ImbueEffects = new Dictionary<string, DM_ImbueEffect>();
 
         public static Dictionary<string, DM_Recipe> Recipes = new Dictionary<string, DM_Recipe>();
+        public static Dictionary<string, DM_EnchantmentRecipe> EnchantmentRecipes = new Dictionary<string, DM_EnchantmentRecipe>();
         public static Dictionary<string, DM_DropTable> DropTables = new Dictionary<string, DM_DropTable>();
 
         internal void Awake()
@@ -167,17 +168,6 @@ namespace Dataminer
             }
             File.WriteAllLines(Serializer.Folders.Lists + "/TagSources.txt", TagTable.ToArray());
 
-            //// ========== Item Sources ==========
-            //List<string> ItemSourcesTable = new List<string>();
-            //foreach (var entry in ItemLootSources)
-            //{
-            //    string dir = Folders.Lists + "/ItemSources";
-            //    Dataminer.SerializeXML(dir, entry.Key, entry.Value, typeof(ItemSource));
-
-            //    ItemSourcesTable.Add(entry.Key + "	" + entry.Value.ItemName);
-            //}
-            //File.WriteAllLines(Folders.Lists + "/ItemSources.txt", ItemSourcesTable.ToArray());
-
             // ========== Container Sources ==========
             foreach (var entry in ContainerSummaries)
             {
@@ -222,7 +212,9 @@ namespace Dataminer
                     }
                 }
 
-                ItemTable.Add(entry.Key + "	" + entry.Value.Name + "	" + entry.Value.gameObjectName + "	" + saveDir);
+                var safename = Serializer.SafeName(entry.Value.Name);
+
+                ItemTable.Add(entry.Key + "	" + safename + "	" + entry.Value.gameObjectName + "	" + saveDir);
 
             }
             File.WriteAllLines(Serializer.Folders.Lists + "/Items.txt", ItemTable.ToArray());
@@ -260,6 +252,14 @@ namespace Dataminer
                 RecipesTable.Add(entry.Key + "	" + entry.Value.StationType + "	" + results + "	" + ingredients);
             }
             File.WriteAllLines(Serializer.Folders.Lists + "/Recipes.txt", RecipesTable.ToArray());
+
+            // ========== Enchantments ========
+            List<string> enchantTable = new List<string>();
+            foreach (var entry in EnchantmentRecipes)
+            {
+                enchantTable.Add(entry.Key + "	" + entry.Value.Name);
+            }
+            File.WriteAllLines(Serializer.Folders.Lists + "/Enchantments.txt", enchantTable.ToArray());
 
             // ========== DropTables ==========
             File.WriteAllLines(Serializer.Folders.Lists + "/DropTables.txt", DropTables.Keys.ToArray());

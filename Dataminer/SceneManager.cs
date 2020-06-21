@@ -7,6 +7,10 @@ using UnityEngine;
 using System.IO;
 using System.Xml.Serialization;
 using HarmonyLib;
+using NodeCanvas.Framework;
+using NodeCanvas.Tasks.Actions;
+using NodeCanvas.BehaviourTrees;
+using NodeCanvas.DialogueTrees;
 
 namespace Dataminer
 {
@@ -77,9 +81,6 @@ namespace Dataminer
 
                 /*        Parse Scene        */
 
-                //// temp debug: find cheatable dialogues
-                //FindCheatableDialogue();
-
                 // Disable the TreeBehaviour Managers while we do stuff with enemies
                 DisableCanvases();
 
@@ -102,6 +103,8 @@ namespace Dataminer
 
             Debug.Log("[Dataminer] Finished.");
         }
+
+        
 
         #region PARSE ALL LOOT FUNCTION
         // Parse Loot
@@ -207,7 +210,7 @@ namespace Dataminer
                 if (SceneManagerHelper.ActiveSceneName.ToLower().Contains("hallowed"))
                     region = "Hallowed Marsh";
                 if (SceneManagerHelper.ActiveSceneName.ToLower().Contains("antique"))
-                    region = "Antique Fields";
+                    region = "Antique Plateau";
             }
             return region;
         }
@@ -234,6 +237,8 @@ namespace Dataminer
                         dict = SceneHelper.MarshDungeons; break;
                     case "Abrassar":
                         dict = SceneHelper.AbrassarDungeons; break;
+                    case "Antique Plateau":
+                        dict = SceneHelper.AntiqueDungeons; break;
                     default: break;
                 }
 

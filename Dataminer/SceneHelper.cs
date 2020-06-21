@@ -51,6 +51,23 @@ namespace Dataminer
 
         public static Dictionary<string, string> SceneBuildNames = new Dictionary<string, string>
         {
+            
+            // ANTIQUE PLATEAU
+            { "Harmattan",                          "Harmattan" },
+            { "AntiqueField",                       "Antique Plateau" },
+            { "AntiqueField_Dungeon1",              "Abandoned Living Quarters" },
+            { "AntiqueField_Dungeon2",              "Forgotten Research Laboratory" },
+            { "AntiqueField_Dungeon3",              "Ancient Foundry" },
+            { "AntiqueField_Dungeon4",              "Ruined Warehouse" },
+            { "AntiqueField_Dungeon5",              "Lost Golem Manufacturing Facility" },
+            { "AntiqueField_Dungeon6",              "Crumbling Loading Docks" },
+            { "AntiqueField_Dungeon7",              "Destroyed Test Chambers" },
+            { "AntiqueField_Dungeon8",              "Compromised Mana Transfer Station" },
+            { "AntiqueField_Dungeon9",              "Old Harmattan" },
+            { "AntiqueFieldDungeonsBosses",         "Unknown Arena" },
+            { "AntiqueFieldDungeonsSmall",          "Harmattan Misc. Dungeons" },
+
+            // NON-DLC
             { "CierzoTutorial",                     "Shipwreck Beach" },
             { "CierzoNewTerrain",                   "Cierzo" },
             { "CierzoDestroyed",                    "Cierzo (Destroyed)" },
@@ -100,21 +117,6 @@ namespace Dataminer
             { "EmercarDungeonsSmall",               "Enmerkar Misc. Dungeons" },
             { "EmercarDungeonsBosses",              "Unknown Arena" },
             { "DreamWorld",                         "In Between" },
-            // ANTIQUE PLATEAU
-            // { "Harmattan",                       "Harmattan" },
-            // { "?",                               "Antique Plateau" },
-            // { "?",                               "Abandoned Living Quarters" },
-            // { "?",                               "Forgotten Research Laboratory" },
-            // { "?",                               "Ancient Golem Foundry" },
-            // { "?",                               "Ruined Golem Warehouse" },
-            // { "?",                               "Lost Golem Manufacturing Facility" }
-            // { "?",                               "Crumbling Loading Docks" },
-            // { "?",                               "Destroyed Test Chambers" },
-            // { "?",                               "Compromised Mana Transfer Station" },
-            // { "?",                               "Old Harmattan" },
-            // { "?",                               "Drifting Dreamscape" },
-            // { "HarmattanDungeonsBosses",         "Unknown Arena" },
-            // { "HarmattanMiscDungeons",           "Harmattan Misc. Dungeons" }
         };
 
         public static Dictionary<string, List<string>> ScenesByRegion = new Dictionary<string, List<string>>
@@ -191,14 +193,13 @@ namespace Dataminer
                     "Antique Plateau",
                     "Abandoned Living Quarters",
                     "Forgotten Research Laboratory",
-                    "Ancient Golem Foundry",
-                    "Ruined Golem Warehouse",
+                    "Ancient Foundry",
+                    "Ruined Warehouse",
                     "Lost Golem Manufacturing Facility",
                     "Crumbling Loading Docks",
                     "Destroyed Test Chambers",
                     "Compromised Mana Transfer Station",
                     "Old Harmattan",
-                    "Drifting Dreamscape"
                 }
             },
             {
@@ -263,15 +264,14 @@ namespace Dataminer
 
         public static Dictionary<string, Vector3> AntiqueDungeons = new Dictionary<string, Vector3>
         {
-            { "Unknown", new Vector3(0, 0, 0) },
-            // { "Blood Mage Hideout",      new Vector3(0, 0, 0)},
-            // { "Wendigo Lair",            new Vector3(0, 0, 0)},
-            // { "Troglodyte Warren",       new Vector3(0, 0, 0)},
-            // { "Bandit Hideout",          new Vector3(0, 0, 0)},
-            // { "Abandoned Storage",       new Vector3(0, 0, 0)},
-            // { "Old Harmattan Basement",  new Vector3(0, 0, 0)},
-            // { "Corrupted Cave",          new Vector3(0, 0, 0)},
-            // { "Immaculate's Camp",       new Vector3(0, 0, 0)}
+             { "Blood Mage Hideout",      new Vector3(0, 0, 0)},
+             { "Immaculate's Camp",       new Vector3(300, 0, 0)},
+             { "Troglodyte Warren",       new Vector3(600, 0, 0)},
+             { "Bandit Hideout",          new Vector3(900, 0, 0)},
+             { "Abandoned Storage",       new Vector3(1200, 0, 0)},
+             { "Old Harmattan Basement",  new Vector3(1500, 0, 0)},
+             { "Corrupted Cave",          new Vector3(1800, 0, 0)},
+             { "Wendigo Lair",            new Vector3(2100, 0, 0)},
         };
     }
 }

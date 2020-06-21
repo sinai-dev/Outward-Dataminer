@@ -14,6 +14,9 @@ namespace Dataminer
         public bool? SpecialIsZoom;
         public int? MaxProjectileShots;
 
+        public float BaseHealthAbsorbRatio;
+        public float BaseMaxHealthAbsorbRatio;
+
         public override void SerializeItem(Item item, DM_Item holder)
         {
             base.SerializeItem(item, holder);
@@ -26,6 +29,9 @@ namespace Dataminer
             template.SwingSound = weapon.SwingSoundType;
             template.SpecialIsZoom = weapon.SpecialIsZoom;
             template.MaxProjectileShots = -1;
+
+            template.BaseHealthAbsorbRatio = weapon.BaseHealthAbsorbRatio;
+            template.BaseMaxHealthAbsorbRatio = weapon.BaseMaxHealthAbsorbRatio;
 
             if (weapon.GetComponent<WeaponLoadout>() is WeaponLoadout loadout)
             {

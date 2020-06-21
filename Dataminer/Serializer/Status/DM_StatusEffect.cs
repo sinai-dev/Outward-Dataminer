@@ -134,6 +134,8 @@ namespace Dataminer
             foreach (var tag in tags)
             {
                 Tags.Add(tag.TagName);
+
+                ListManager.AddTagSource(tag, Name);
             }
 
             // For existing StatusEffects, the StatusData contains the real values, so we need to SetValue to each Effect.

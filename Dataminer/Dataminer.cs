@@ -58,7 +58,7 @@ namespace Dataminer
                 {
                     if (loc.DefaultName == "English")
                     {
-                        DM_Localization.SaveLocalization(loc);
+                        LocalizationHolder.SaveLocalization(loc);
                     }
                 }
             }
@@ -82,6 +82,8 @@ namespace Dataminer
             DM_StatusEffect.ParseAllEffects();
 
             DM_Recipe.ParseAllRecipes();
+
+            DM_EnchantmentRecipe.ParseAllRecipes();
         }
     }
 }

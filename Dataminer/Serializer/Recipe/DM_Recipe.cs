@@ -68,12 +68,12 @@ namespace Dataminer
                 }
             }
 
-            foreach (ItemQuantity item in recipe.Results)
+            foreach (ItemReferenceQuantity item in recipe.Results)
             {
                 recipeHolder.Results.Add(new ItemQty
                 {
-                    ItemName = item.Item.Name,
-                    ItemID = item.Item.ItemID,
+                    ItemName = Serializer.SafeName(ResourcesPrefabManager.Instance.GetItemPrefab(item.ItemID).Name),
+                    ItemID = item.ItemID,
                     Quantity = item.Quantity
                 });
             }

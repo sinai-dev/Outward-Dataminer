@@ -55,11 +55,9 @@ namespace Dataminer
 
                         ListManager.Items.Add(item.ItemID.ToString(), itemHolder);
 
-                        // Folder and Save Name
+                        var safename = Serializer.SafeName(item.Name);
                         string dir = GetFullSaveDir(item, itemHolder);
-                        string saveName = item.Name + " (" + item.gameObject.name + ")";
-
-                        Serializer.SaveToXml(dir, saveName, itemHolder);
+                        Serializer.SaveToXml(dir, safename + " (" + item.gameObject.name + ")", itemHolder);
                     }
                     catch { }
                 }
@@ -123,6 +121,8 @@ namespace Dataminer
                 foreach (Tag tag in item.Tags)
                 {
                     holder.Tags.Add(tag.TagName);
+
+                    ListManager.AddTagSource(tag, Serializer.SafeName(item.Name));
                 }
             }
 
