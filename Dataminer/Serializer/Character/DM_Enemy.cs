@@ -467,8 +467,7 @@ namespace Dataminer
         // Custom Equals comparer
         public bool Equals(DM_Enemy other)
         {
-            bool equal = this.GameObject_Name == other.GameObject_Name
-                && this.Max_Health == other.Max_Health
+            bool equal = this.Max_Health == other.Max_Health
                 && this.Health_Regen_Per_Second == other.Health_Regen_Per_Second
                 && this.Impact_Resistance == other.Impact_Resistance
                 && this.Guaranteed_Drops.Count == other.Guaranteed_Drops.Count
@@ -520,16 +519,8 @@ namespace Dataminer
                 // check damage bonus and resistances
                 for (int i = 0; i < 6; i++)
                 {
-                    //// fix for the comparison not using the corrected values sometimes.
-                    //// need to figure out why this is even happening.
-                    //float otherRes = other.Damage_Resistances[i];
-                    //float otherBonus = other.Damage_Bonuses[i];
-
-                    //otherRes = (float)Math.Round(otherRes * 100f, 2);
-                    //otherBonus = (float)Math.Round((otherBonus - 1) * 100f, 2);
-
-                    if (this.Damage_Resistances[i] != other.Damage_Resistances[i] // && this.Damage_Resistances[i] != otherRes)
-                        || this.Damage_Bonuses[i] != other.Damage_Bonuses[i] // && this.Damage_Bonuses[i] != otherBonus)
+                    if (this.Damage_Resistances[i] != other.Damage_Resistances[i] 
+                        || this.Damage_Bonuses[i] != other.Damage_Bonuses[i]
                         || this.Protection[i] != other.Protection[i])
                     {
                         return false;

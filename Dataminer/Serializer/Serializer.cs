@@ -59,7 +59,8 @@ namespace Dataminer
                 if (m_dmTypes == null || m_dmTypes.Length < 1)
                 {
                     var list = new List<Type>();
-                    foreach (var type in DM_Assembly.GetTypes())
+
+                    foreach (var type in GetTypesSafe(DM_Assembly))
                     {
                         // check if marked as DM_Serialized
                         if (type.GetCustomAttributes(typeof(DM_Serialized), true).Length > 0)
@@ -78,6 +79,22 @@ namespace Dataminer
                 }
 
                 return m_dmTypes;
+            }
+        }
+
+        public static IEnumerable<Type> GetTypesSafe(Assembly asm)
+        {
+            try 
+            { 
+                return asm.GetTypes(); 
+            }
+            catch (ReflectionTypeLoadException e) 
+            {
+                return e.Types.Where(x => x != null); 
+            }
+            catch 
+            { 
+                return Enumerable.Empty<Type>(); 
             }
         }
 
@@ -147,6 +164,28 @@ namespace Dataminer
             }
         }
 
+        public static XmlSerializer GetXmlSerializer(Type type)
+        {
+            XmlSerializer xml;
+            
+            try
+            {
+                if (!m_serializerCache.ContainsKey(type))
+                {
+                    xml = new XmlSerializer(type, DMTypes);
+                    m_serializerCache.Add(type, xml);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception getting XML Serializer!");
+                Console.WriteLine("Stack: " + ex.StackTrace);
+                ConsoleLogInners(ex);
+            }
+
+            return m_serializerCache[type];
+        }
+
         private static readonly Dictionary<Type, XmlSerializer> m_serializerCache = new Dictionary<Type, XmlSerializer>();
 
         /// <summary>
@@ -173,20 +212,57 @@ namespace Dataminer
 
             var type = obj.GetType();
 
-            XmlSerializer xml;
-            if (m_serializerCache.ContainsKey(type))
-            {
-                xml = m_serializerCache[type];
-            }
-            else
-            {
-                xml = new XmlSerializer(type, DMTypes);
-                m_serializerCache.Add(type, xml);
-            }
+            var xml = GetXmlSerializer(type);
             
             FileStream file = File.Create(path);
             xml.Serialize(file, obj);
             file.Close();
+        }
+
+        /// <summary>
+        /// Load an SL_Type object from XML.
+        /// </summary>
+        public static object LoadFromXml(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            // First we have to find out what kind of Type this xml was serialized as.
+            string typeName = "";
+            using (XmlReader reader = XmlReader.Create(path))
+            {
+                while (reader.Read()) // just get the first element (root) then break.
+                {
+                    if (reader.NodeType == XmlNodeType.Element)
+                    {
+                        // the real type might be saved as an attribute
+                        if (!string.IsNullOrEmpty(reader.GetAttribute("type")))
+                        {
+                            typeName = reader.GetAttribute("type");
+                        }
+                        else
+                        {
+                            typeName = reader.Name;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(typeName) && DM_Assembly.GetType($"Dataminer.{typeName}") is Type type)
+            {
+                var xml = GetXmlSerializer(type);
+                FileStream file = File.OpenRead(path);
+                var obj = xml.Deserialize(file);
+                file.Close();
+                return obj;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>Remove invalid filename characters from a string</summary>
@@ -194,6 +270,25 @@ namespace Dataminer
         {
             return string.Join("_", s.Split(Path.GetInvalidFileNameChars())).Trim();
         }
+
+
+
+        public static void ConsoleLogInners(Exception ex)
+        {
+            var inner = ex.InnerException;
+
+            if (inner != null)
+            {
+                Console.WriteLine(inner.Message);
+
+                if (inner.InnerException is Exception innerInner)
+                {
+                    ConsoleLogInners(innerInner);
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Helpers for the folder paths Dataminer uses.

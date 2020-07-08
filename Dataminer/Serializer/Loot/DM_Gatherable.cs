@@ -43,6 +43,23 @@ namespace Dataminer
                 gatherableHolder.Name = "Fishing Spot (" + gatherableHolder.DropTables[0] + ")";
             }
 
+            if (gatherableHolder.Name.Contains("vein"))
+            {
+                gatherableHolder.Name.Replace("vein", "Vein");
+
+                if (gatherableHolder.Name.Contains("Iron") || gatherableHolder.Name == "Palladium")
+                {
+                    foreach (var table in gatherableHolder.DropTables)
+                    {
+                        if (table.Contains("Tourmaline"))
+                        {
+                            gatherableHolder.Name += " (Tourmaline)";
+                            break;
+                        }
+                    }
+                }
+            }
+
             return gatherableHolder;
         }
     }

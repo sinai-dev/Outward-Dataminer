@@ -23,8 +23,6 @@ namespace Dataminer
 
         public DM_Enchantment Result;
 
-        // TODO RESULT
-
         public static void ParseAllRecipes()
         {
             var recipes = (Dictionary<int, EnchantmentRecipe>)At.GetValue(typeof(RecipeManager), RecipeManager.Instance, "m_enchantmentRecipes");

@@ -51,23 +51,6 @@ namespace Dataminer
 
         public static Dictionary<string, string> SceneBuildNames = new Dictionary<string, string>
         {
-            
-            // ANTIQUE PLATEAU
-            { "Harmattan",                          "Harmattan" },
-            { "AntiqueField",                       "Antique Plateau" },
-            { "AntiqueField_Dungeon1",              "Abandoned Living Quarters" },
-            { "AntiqueField_Dungeon2",              "Forgotten Research Laboratory" },
-            { "AntiqueField_Dungeon3",              "Ancient Foundry" },
-            { "AntiqueField_Dungeon4",              "Ruined Warehouse" },
-            { "AntiqueField_Dungeon5",              "Lost Golem Manufacturing Facility" },
-            { "AntiqueField_Dungeon6",              "Crumbling Loading Docks" },
-            { "AntiqueField_Dungeon7",              "Destroyed Test Chambers" },
-            { "AntiqueField_Dungeon8",              "Compromised Mana Transfer Station" },
-            { "AntiqueField_Dungeon9",              "Old Harmattan" },
-            { "AntiqueFieldDungeonsBosses",         "Unknown Arena" },
-            { "AntiqueFieldDungeonsSmall",          "Harmattan Misc. Dungeons" },
-
-            // NON-DLC
             { "CierzoTutorial",                     "Shipwreck Beach" },
             { "CierzoNewTerrain",                   "Cierzo" },
             { "CierzoDestroyed",                    "Cierzo (Destroyed)" },
@@ -117,6 +100,19 @@ namespace Dataminer
             { "EmercarDungeonsSmall",               "Enmerkar Misc. Dungeons" },
             { "EmercarDungeonsBosses",              "Unknown Arena" },
             { "DreamWorld",                         "In Between" },
+            { "Harmattan",                          "Harmattan" },                      // THE SOROBOREANS DLC
+            { "AntiqueField",                       "Antique Plateau" },
+            { "AntiqueField_Dungeon1",              "Abandoned Living Quarters" },
+            { "AntiqueField_Dungeon2",              "Forgotten Research Laboratory" },
+            { "AntiqueField_Dungeon3",              "Ancient Foundry" },
+            { "AntiqueField_Dungeon4",              "Ruined Warehouse" },
+            { "AntiqueField_Dungeon5",              "Lost Golem Manufacturing Facility" },
+            { "AntiqueField_Dungeon6",              "Crumbling Loading Docks" },
+            { "AntiqueField_Dungeon7",              "Destroyed Test Chambers" },
+            { "AntiqueField_Dungeon8",              "Compromised Mana Transfer Station" },
+            { "AntiqueField_Dungeon9",              "Old Harmattan" },
+            { "AntiqueFieldDungeonsBosses",         "Unknown Arena" },
+            { "AntiqueFieldDungeonsSmall",          "Harmattan Misc. Dungeons" },
         };
 
         public static Dictionary<string, List<string>> ScenesByRegion = new Dictionary<string, List<string>>

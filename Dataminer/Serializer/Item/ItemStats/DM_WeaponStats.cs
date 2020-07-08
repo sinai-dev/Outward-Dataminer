@@ -24,6 +24,12 @@ namespace Dataminer
 
             var wStats = stats as WeaponStats;
 
+            if (wStats.Attacks != null && wStats.Attacks.Length == 5)
+            {
+                var weapon = stats.GetComponent<Weapon>();
+                CheckAttackDataMultipliers(weapon, wStats.Attacks);
+            }
+
             template.Attacks = wStats.Attacks;
             template.AttackSpeed = wStats.AttackSpeed;
             template.Impact = wStats.Impact;
@@ -32,6 +38,48 @@ namespace Dataminer
             template.BaseDamage = Damages.ParseDamageList(wStats.BaseDamage);
         }
 
+        private void CheckAttackDataMultipliers(Weapon weapon, WeaponStats.AttackData[] datas)
+        {
+            if (weapon.IsAiStartingGear || !weapon.IsPickable || weapon.ItemID < 2000000)
+            {
+                return;
+            }
+
+            var autoScaled = GetScaledAttackData(weapon);
+
+            for (int i = 0; i < datas.Length; i++)
+            {
+                var data = datas[i];
+                var autoData = autoScaled[i];
+
+                if (!NearlyEquals(data.Damage[0], autoData.Damage[0]))
+                {
+                    Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Damage is not AutoScaled!");
+                    for (int j = 0; j < data.Damage.Count; j++)
+                    {
+                        Debug.Log("Damage[" + j + "], Real: " + data.Damage[j] + " (autoscaled: " + autoData.Damage[j] + ")");
+                    }
+                }
+                if (!NearlyEquals(data.Knockback, autoData.Knockback))
+                {
+                    Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Impact is not AutoScaled!");
+                    Debug.Log("Real: " + data.Knockback + ", autoscaled: " + autoData.Knockback);
+                }
+                if (!NearlyEquals(data.StamCost, autoData.StamCost))
+                {
+                    Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], StaminaCost is not AutoScaled!");
+                    Debug.Log("Real: " + data.StamCost + ", autoscaled: " + autoData.StamCost);
+                }
+            }
+        }
+
+        private bool NearlyEquals(float f1, float f2, float margin = 0.05f)
+        {
+            var diff = f1 - f2;
+            return diff > -margin && diff < margin;
+        }
+
+        #region Weapon Type AttackData Multipliers (not using)
         public static WeaponStats.AttackData[] GetScaledAttackData(Weapon weapon)
         {
             var type = weapon.Type;
@@ -100,7 +148,7 @@ namespace Dataminer
                 {   //                         1     2     3     4     5
                     DamageMult = new float[] { 1.0f, 1.0f, 1.5f, 1.1f, 1.1f },
                     ImpactMult = new float[] { 1.0f, 1.0f, 1.5f, 1.1f, 1.1f },
-                    StamMult   = new float[] { 1.0f, 1.0f, 1.3f, 1.1f, 1.1f } 
+                    StamMult   = new float[] { 1.0f, 1.0f, 1.3f, 1.1f, 1.1f }
                 }
             },
             {
@@ -109,7 +157,7 @@ namespace Dataminer
                 {   //                         1     2     3     4     5
                     DamageMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f },
                     ImpactMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f },
-                    StamMult   = new float[] { 1.0f, 1.0f, 1.2f, 1.2f, 1.2f } 
+                    StamMult   = new float[] { 1.0f, 1.0f, 1.2f, 1.2f, 1.2f }
                 }
             },
             {
@@ -118,7 +166,7 @@ namespace Dataminer
                 {   //                         1     2     3     4     5
                     DamageMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f },
                     ImpactMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f },
-                    StamMult   = new float[] { 1.0f, 1.0f, 1.2f, 1.1f, 1.1f } 
+                    StamMult   = new float[] { 1.0f, 1.0f, 1.2f, 1.1f, 1.1f }
                 }
             },
             {
@@ -127,7 +175,7 @@ namespace Dataminer
                 {   //                         1     2     3     4     5
                     DamageMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f },
                     ImpactMult = new float[] { 1.0f, 1.0f, 2.5f, 1.3f, 1.3f },
-                    StamMult   = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f } 
+                    StamMult   = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f }
                 }
             },
             {
@@ -136,7 +184,7 @@ namespace Dataminer
                 {   //                         1     2     3      4     5
                     DamageMult = new float[] { 1.0f, 1.0f, 0.75f, 1.4f, 1.4f },
                     ImpactMult = new float[] { 1.0f, 1.0f, 2.0f,  1.4f, 1.4f },
-                    StamMult   = new float[] { 1.0f, 1.0f, 1.2f,  1.2f, 1.2f } 
+                    StamMult   = new float[] { 1.0f, 1.0f, 1.2f,  1.2f, 1.2f }
                 }
             },
             {
@@ -145,7 +193,7 @@ namespace Dataminer
                 {   //                         1     2     3     4     5
                     DamageMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.7f },
                     ImpactMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.7f },
-                    StamMult   = new float[] { 1.0f, 1.0f, 1.25f, 1.25f, 1.75f } 
+                    StamMult   = new float[] { 1.0f, 1.0f, 1.25f, 1.25f, 1.75f }
                 }
             },
             {
@@ -161,9 +209,9 @@ namespace Dataminer
                 Weapon.WeaponType.FistW_2H,
                 new WeaponStatData()
                 {   //                         1     2     3     4     5
-                    DamageMult = new float[] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f },
-                    ImpactMult = new float[] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f },
-                    StamMult   = new float[] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f }
+                    DamageMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f },
+                    ImpactMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f },
+                    StamMult   = new float[] { 1.0f, 1.0f, 1.3f, 1.2f, 1.2f }
                 }
             }
         };
@@ -174,5 +222,6 @@ namespace Dataminer
             public float[] ImpactMult;
             public float[] StamMult;
         }
+        #endregion
     }
 }

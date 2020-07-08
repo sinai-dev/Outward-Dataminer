@@ -48,6 +48,13 @@ namespace Dataminer
                 {
                     try
                     {
+                        var safename = Serializer.SafeName(item.Name);
+
+                        //if (item.ItemIcon && !item.HasDefaultIcon)
+                        //{
+                        //    SideLoader.CustomTextures.SaveIconAsPNG(item.ItemIcon, "ItemIcons", safename);
+                        //}
+
                         //Debug.Log("Parsing " + item.Name + ", typeof: " + item.GetType());
 
                         // Parse the item. This will recursively dive.
@@ -55,7 +62,6 @@ namespace Dataminer
 
                         ListManager.Items.Add(item.ItemID.ToString(), itemHolder);
 
-                        var safename = Serializer.SafeName(item.Name);
                         string dir = GetFullSaveDir(item, itemHolder);
                         Serializer.SaveToXml(dir, safename + " (" + item.gameObject.name + ")", itemHolder);
                     }

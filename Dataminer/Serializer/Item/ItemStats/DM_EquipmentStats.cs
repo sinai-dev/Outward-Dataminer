@@ -21,7 +21,14 @@ namespace Dataminer
         public float Pouch_Bonus;
         public float Heat_Protection;
         public float Cold_Protection;
+        
+        // DLC?
         public float Corruption_Protection;
+        public float Cooldown_Reduction;
+        public float Hunger_Affect;
+        public float Thirst_Affect;
+        public float Fatigue_Affect;
+
 
         public override void SerializeStats(ItemStats stats, DM_ItemStats holder)
         {
@@ -31,7 +38,13 @@ namespace Dataminer
 
             try
             {
+                var item = stats.GetComponent<Item>();
+
                 var eStats = stats as EquipmentStats;
+                equipmentStatsHolder.Cooldown_Reduction = eStats.CooldownReduction;                
+                equipmentStatsHolder.Hunger_Affect = eStats.HungerModifier;                
+                equipmentStatsHolder.Thirst_Affect = eStats.ThirstModifier;                
+                equipmentStatsHolder.Fatigue_Affect = eStats.SleepModifier;
 
                 equipmentStatsHolder.Impact_Resistance = eStats.ImpactResistance;
                 equipmentStatsHolder.Damage_Protection = eStats.GetDamageProtection(DamageType.Types.Physical);

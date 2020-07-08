@@ -11,9 +11,16 @@ namespace Dataminer
         public bool CheckOwner;
 
         // StatusSpecific, StatusFamily, StatusType
-        public StatusEffectSelector.Types StatusSelectorType;
+        public SelectorTypes StatusSelectorType;
 
         public string SelectorValue;
+
+        public enum SelectorTypes
+        {
+            StatusSpecific,
+            StatusFamily,
+            StatusType
+        }
 
         public override void SerializeEffect<T>(EffectCondition component, T template)
         {
@@ -26,7 +33,7 @@ namespace Dataminer
 
             var selector = comp.StatusEffect;
 
-            holder.StatusSelectorType = selector.Type;
+            holder.StatusSelectorType = (SelectorTypes)selector.Type;
 
             switch (selector.Type)
             {
