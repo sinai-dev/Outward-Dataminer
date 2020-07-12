@@ -84,6 +84,10 @@ namespace Dataminer
             DM_Recipe.ParseAllRecipes();
 
             DM_EnchantmentRecipe.ParseAllRecipes();
+
+            ListManager.SaveEarlyLists();
+
+            Debug.LogWarning("Finished prefab dumping.");
         }
     }
 }

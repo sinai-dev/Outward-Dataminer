@@ -33,6 +33,8 @@ namespace Dataminer
         public float MobileCastMovementMult;
         public int CastSheatheRequired;
 
+        public float OverrideSellModifier;
+
         // for Perishable ItemExtension
         public string PerishTime;
 
@@ -103,12 +105,14 @@ namespace Dataminer
             holder.RepairedInRest = item.RepairedInRest;
             holder.BehaviorOnNoDurability = item.BehaviorOnNoDurability;
 
+            holder.OverrideSellModifier = (float)At.GetValue(typeof(Item), item, "m_overrideSellModifier");
+
             if (item.GetComponent<Perishable>() is Perishable perish)
             {
                 float perishRate = perish.DepletionRate * 0.03333333f;
                 float perishModifier = 1 / perishRate;
 
-                var remainingTicks = item.MaxDurability * perishModifier; // est game time in seconds
+                var remainingTicks = item.MaxDurability * perishModifier; // each tick is 2 in-game minutes (~5 seconds irl)
                 var minutes = remainingTicks * 2;
                 TimeSpan t = TimeSpan.FromMinutes(minutes);
 

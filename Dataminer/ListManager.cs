@@ -140,61 +140,8 @@ namespace Dataminer
             }
         }
 
-        public static void SaveLists()
+        public static void SaveEarlyLists()
         {
-            // ========== Scene Summaries ==========
-            foreach (var entry in SceneSummaries)
-            {
-                string[] array = entry.Key.Split(new char[] { ':' });
-                string region = array[0];
-                string location = array[1];
-
-                string dir = Serializer.Folders.Scenes + "/" + region + "/" + location;
-                string saveName = "Summary";
-                Serializer.SaveToXml(dir, saveName, entry.Value);
-            }
-
-            // ========== Tag Sources ==========
-            List<string> TagTable = new List<string>();
-            foreach (var entry in TagSources)
-            {
-                string s = "";
-                foreach (var source in entry.Value)
-                {
-                    if (s != "") { s += ","; }
-                    s += source;
-                }
-                TagTable.Add(entry.Key + "	" + s);
-            }
-            File.WriteAllLines(Serializer.Folders.Lists + "/TagSources.txt", TagTable.ToArray());
-
-            // ========== Container Sources ==========
-            foreach (var entry in ContainerSummaries)
-            {
-                string dir = Serializer.Folders.Lists + "/ContainerSummaries";
-                Serializer.SaveToXml(dir, entry.Key, entry.Value);
-            }
-            File.WriteAllLines(Serializer.Folders.Lists + "/ContainerSummaries.txt", ContainerSummaries.Keys.ToArray());
-
-            // ========== Enemies ==========
-            List<string> EnemyTable = new List<string>();
-            foreach (var entry in EnemyManifest)
-            {
-                foreach (var enemyHolder in entry.Value)
-                {
-                    EnemyTable.Add(enemyHolder.Name + " (" + enemyHolder.Unique_ID + ")");
-                }
-            }
-            File.WriteAllLines(Serializer.Folders.Lists + "/Enemies.txt", EnemyTable.ToArray());
-
-            // ========== Merchants ===========
-            List<string> MerchantTable = new List<string>();
-            foreach (var entry in Merchants)
-            {
-                MerchantTable.Add(entry.Key);
-            }
-            File.WriteAllLines(Serializer.Folders.Lists + "/Merchants.txt", MerchantTable.ToArray());
-
             // ========== Items ==========
             List<string> ItemTable = new List<string>();
             foreach (var entry in Items)
@@ -260,6 +207,62 @@ namespace Dataminer
                 enchantTable.Add(entry.Key + "	" + entry.Value.Name);
             }
             File.WriteAllLines(Serializer.Folders.Lists + "/Enchantments.txt", enchantTable.ToArray());
+        }
+
+        public static void SaveLists()
+        {
+            // ========== Scene Summaries ==========
+            foreach (var entry in SceneSummaries)
+            {
+                string[] array = entry.Key.Split(new char[] { ':' });
+                string region = array[0];
+                string location = array[1];
+
+                string dir = Serializer.Folders.Scenes + "/" + region + "/" + location;
+                string saveName = "Summary";
+                Serializer.SaveToXml(dir, saveName, entry.Value);
+            }
+
+            // ========== Tag Sources ==========
+            List<string> TagTable = new List<string>();
+            foreach (var entry in TagSources)
+            {
+                string s = "";
+                foreach (var source in entry.Value)
+                {
+                    if (s != "") { s += ","; }
+                    s += source;
+                }
+                TagTable.Add(entry.Key + "	" + s);
+            }
+            File.WriteAllLines(Serializer.Folders.Lists + "/TagSources.txt", TagTable.ToArray());
+
+            // ========== Container Sources ==========
+            foreach (var entry in ContainerSummaries)
+            {
+                string dir = Serializer.Folders.Lists + "/ContainerSummaries";
+                Serializer.SaveToXml(dir, entry.Key, entry.Value);
+            }
+            File.WriteAllLines(Serializer.Folders.Lists + "/ContainerSummaries.txt", ContainerSummaries.Keys.ToArray());
+
+            // ========== Enemies ==========
+            List<string> EnemyTable = new List<string>();
+            foreach (var entry in EnemyManifest)
+            {
+                foreach (var enemyHolder in entry.Value)
+                {
+                    EnemyTable.Add(enemyHolder.Name + " (" + enemyHolder.Unique_ID + ")");
+                }
+            }
+            File.WriteAllLines(Serializer.Folders.Lists + "/Enemies.txt", EnemyTable.ToArray());
+
+            // ========== Merchants ===========
+            List<string> MerchantTable = new List<string>();
+            foreach (var entry in Merchants)
+            {
+                MerchantTable.Add(entry.Key);
+            }
+            File.WriteAllLines(Serializer.Folders.Lists + "/Merchants.txt", MerchantTable.ToArray());
 
             // ========== DropTables ==========
             File.WriteAllLines(Serializer.Folders.Lists + "/DropTables.txt", DropTables.Keys.ToArray());

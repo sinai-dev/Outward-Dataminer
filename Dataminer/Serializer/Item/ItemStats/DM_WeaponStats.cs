@@ -45,32 +45,36 @@ namespace Dataminer
                 return;
             }
 
-            var autoScaled = GetScaledAttackData(weapon);
-
-            for (int i = 0; i < datas.Length; i++)
+            try
             {
-                var data = datas[i];
-                var autoData = autoScaled[i];
+                var autoScaled = GetScaledAttackData(weapon);
 
-                if (!NearlyEquals(data.Damage[0], autoData.Damage[0]))
+                for (int i = 0; i < datas.Length; i++)
                 {
-                    Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Damage is not AutoScaled!");
-                    for (int j = 0; j < data.Damage.Count; j++)
+                    var data = datas[i];
+                    var autoData = autoScaled[i];
+
+                    if (!NearlyEquals(data.Damage[0], autoData.Damage[0]))
                     {
-                        Debug.Log("Damage[" + j + "], Real: " + data.Damage[j] + " (autoscaled: " + autoData.Damage[j] + ")");
+                        Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Damage is not AutoScaled!");
+                        for (int j = 0; j < data.Damage.Count; j++)
+                        {
+                            Debug.Log("Damage[" + j + "], Real: " + data.Damage[j] + " (autoscaled: " + autoData.Damage[j] + ")");
+                        }
+                    }
+                    if (!NearlyEquals(data.Knockback, autoData.Knockback))
+                    {
+                        Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Impact is not AutoScaled!");
+                        Debug.Log("Real: " + data.Knockback + ", autoscaled: " + autoData.Knockback);
+                    }
+                    if (!NearlyEquals(data.StamCost, autoData.StamCost))
+                    {
+                        Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], StaminaCost is not AutoScaled!");
+                        Debug.Log("Real: " + data.StamCost + ", autoscaled: " + autoData.StamCost);
                     }
                 }
-                if (!NearlyEquals(data.Knockback, autoData.Knockback))
-                {
-                    Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Impact is not AutoScaled!");
-                    Debug.Log("Real: " + data.Knockback + ", autoscaled: " + autoData.Knockback);
-                }
-                if (!NearlyEquals(data.StamCost, autoData.StamCost))
-                {
-                    Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], StaminaCost is not AutoScaled!");
-                    Debug.Log("Real: " + data.StamCost + ", autoscaled: " + autoData.StamCost);
-                }
             }
+            catch { }
         }
 
         private bool NearlyEquals(float f1, float f2, float margin = 0.05f)
