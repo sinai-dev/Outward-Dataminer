@@ -133,6 +133,7 @@
     <Compile Include="SceneManager.cs" />
     <Compile Include="Serializer\Effect\Effects\DM_ShootEnchantmentBlast.cs" />
     <Compile Include="Serializer\Enchantment\DM_Enchantment.cs" />
+    <Compile Include="Serializer\Item\DM_DeployableTrap.cs" />
     <Compile Include="Serializer\Localization\LocalizationHolder.cs" />
     <Compile Include="Serializer\Recipe\DM_EnchantmentRecipe.cs" />
     <Compile Include="Serializer\Serializer.cs" />
