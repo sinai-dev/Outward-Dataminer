@@ -17,6 +17,17 @@ namespace Dataminer
 
         public static bool NewDump { get; private set; } = false;
 
+        [HarmonyPatch(typeof(AreaManager), nameof(AreaManager.IsAreaExpired))]
+        public class AreaManager_IsAreaExpired
+        {
+            [HarmonyPrefix]
+            public static bool Prefix(ref bool __result)
+            {
+                __result = true;
+                return false;
+            }
+        }
+
         internal void Awake()
         {
             var obj = new GameObject("Dataminer");

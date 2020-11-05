@@ -69,8 +69,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="SideLoader">
-      <HintPath>..\..\..\..\Steam\steamapps\common\Outward\BepInEx\plugins\SideLoader.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\..\Steam\steamapps\common\Outward\BepInEx\plugins\SideLoader.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
