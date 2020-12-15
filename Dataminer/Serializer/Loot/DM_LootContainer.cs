@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SideLoader;
 using UnityEngine;
 
 namespace Dataminer
@@ -29,7 +30,7 @@ namespace Dataminer
                 lootHolder.Name = "Corpse";
             }
 
-            if (At.GetValue(typeof(SelfFilledItemContainer), loot as SelfFilledItemContainer, "m_drops") is List<Dropable> droppers)
+            if (At.GetField(loot as SelfFilledItemContainer, "m_drops") is List<Dropable> droppers)
             {
                 foreach (Dropable dropper in droppers)
                 {

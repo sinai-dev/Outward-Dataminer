@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using System.IO;
 using System.Xml.Serialization;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -22,7 +23,7 @@ namespace Dataminer
 
         public static void ParseAllRecipes()
         {
-            if (At.GetValue(typeof(RecipeManager), RecipeManager.Instance, "m_recipes") is Dictionary<string, Recipe> recipes)
+            if (References.ALL_RECIPES is Dictionary<string, Recipe> recipes)
             {
                 foreach (Recipe recipe in recipes.Values)
                 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using System.Xml.Serialization;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -18,6 +19,9 @@ namespace Dataminer
 
         public static DM_Effect ParseEffect(Effect effect)
         {
+            if (!effect)
+                return null;
+
             var type = effect.GetType();
 
             if (Serializer.GetBestDMType(type) is Type dm_type && !dm_type.IsAbstract)
@@ -32,7 +36,8 @@ namespace Dataminer
             }
             else
             {
-                Debug.Log(type + " is not supported yet!");
+                if (type != typeof(PlayVFX))
+                    SL.Log(type + " is not supported yet!");
                 return null;
             }
         }

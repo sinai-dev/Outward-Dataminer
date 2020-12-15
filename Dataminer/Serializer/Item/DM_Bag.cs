@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SideLoader;
 using UnityEngine;
 
 namespace Dataminer
@@ -27,7 +28,8 @@ namespace Dataminer
             template.InventoryProtection = bag.InventoryProtection;
 
             if (bag.GetComponentInChildren<Preserver>() is Preserver p
-                && At.GetValue(typeof(Preserver), p, "m_preservedElements") is List<Preserver.PreservedElement> list && list.Count > 0)
+                && At.GetField(p, "m_preservedElements") is List<Preserver.PreservedElement> list 
+                && list.Count > 0)
             {
                 template.Preserver_Amount = list[0].Preservation;
                 template.Nullify_Perish = p.NullifyPerishing;

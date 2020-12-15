@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SideLoader;
 using UnityEngine;
 
 namespace Dataminer
@@ -49,19 +50,19 @@ namespace Dataminer
                 equipmentStatsHolder.Impact_Resistance = eStats.ImpactResistance;
                 equipmentStatsHolder.Damage_Protection = eStats.GetDamageProtection(DamageType.Types.Physical);
                 equipmentStatsHolder.Stamina_Use_Penalty = eStats.StaminaUsePenalty;
-                equipmentStatsHolder.Mana_Use_Modifier = (float)At.GetValue(typeof(EquipmentStats), stats, "m_manaUseModifier");
+                equipmentStatsHolder.Mana_Use_Modifier = (float)At.GetField(stats as EquipmentStats, "m_manaUseModifier");
                 equipmentStatsHolder.Movement_Penalty = eStats.MovementPenalty;
                 equipmentStatsHolder.Pouch_Bonus = eStats.PouchCapacityBonus;
                 equipmentStatsHolder.Heat_Protection = eStats.HeatProtection;
                 equipmentStatsHolder.Cold_Protection = eStats.ColdProtection;
                 equipmentStatsHolder.Corruption_Protection = eStats.CorruptionResistance;
 
-                equipmentStatsHolder.Damage_Bonus = At.GetValue(typeof(EquipmentStats), stats, "m_damageAttack") as float[];
-                equipmentStatsHolder.Damage_Resistance = At.GetValue(typeof(EquipmentStats), stats, "m_damageResistance") as float[];
+                equipmentStatsHolder.Damage_Bonus = At.GetField(stats as EquipmentStats, "m_damageAttack") as float[];
+                equipmentStatsHolder.Damage_Resistance = At.GetField(stats as EquipmentStats, "m_damageResistance") as float[];
             }
             catch (Exception e)
             {
-                Debug.Log("Exception getting stats of " + stats.name + "\r\n" + e.Message + "\r\n" + e.StackTrace);
+                SL.Log("Exception getting stats of " + stats.name + "\r\n" + e.Message + "\r\n" + e.StackTrace);
             }
         }
     }

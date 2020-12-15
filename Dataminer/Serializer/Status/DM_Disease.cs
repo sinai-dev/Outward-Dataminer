@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -23,9 +24,9 @@ namespace Dataminer
             CanDegenerate = disease.CanHealByItself;
             StraightSleepHealTime = disease.StraightSleepHealTime;
             CanBeHealedBySleeping = disease.CanBeHealedBySleeping;
-            AutoHealTime = (int)At.GetValue(typeof(Disease), disease, "m_autoHealTime");
-            DegenerateTime = (float)At.GetValue(typeof(Disease), disease, "m_degenerateTime");
-            DiseaseType = (Diseases)At.GetValue(typeof(Disease), disease, "m_diseasesType");
+            AutoHealTime = (int)At.GetField(disease, "m_autoHealTime");
+            DegenerateTime = (float)At.GetField(disease, "m_degenerateTime");
+            DiseaseType = (Diseases)At.GetField(disease, "m_diseasesType");
         }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 using System.IO;
 using System.Xml.Serialization;
 using Rewired.Data;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -44,7 +45,7 @@ namespace Dataminer
 
         public static void ParseAllItems()
         {
-            if (At.GetValue(typeof(ResourcesPrefabManager), null, "ITEM_PREFABS") is Dictionary<string, Item> ItemPrefabs)
+            if (References.RPM_ITEM_PREFABS is Dictionary<string, Item> ItemPrefabs)
             {
                 foreach (Item item in ItemPrefabs.Values)
                 {
@@ -57,7 +58,7 @@ namespace Dataminer
                         //    SideLoader.CustomTextures.SaveIconAsPNG(item.ItemIcon, "ItemIcons", safename);
                         //}
 
-                        //Debug.Log("Parsing " + item.Name + ", typeof: " + item.GetType());
+                        //SL.Log("Parsing " + item.Name + ", typeof: " + item.GetType());
 
                         // Parse the item. This will recursively dive.
                         var itemHolder = ParseItemToTemplate(item);
@@ -74,7 +75,7 @@ namespace Dataminer
 
         public static DM_Item ParseItemToTemplate(Item item)
         {
-            //Debug.Log("Parsing item to template: " + item.Name);
+            //SL.Log("Parsing item to template: " + item.Name);
 
             var type = Serializer.GetBestDMType(item.GetType());
 
@@ -105,7 +106,7 @@ namespace Dataminer
             holder.RepairedInRest = item.RepairedInRest;
             holder.BehaviorOnNoDurability = item.BehaviorOnNoDurability;
 
-            holder.OverrideSellModifier = (float)At.GetValue(typeof(Item), item, "m_overrideSellModifier");
+            holder.OverrideSellModifier = (float)At.GetField(item, "m_overrideSellModifier");
 
             if (item.GetComponent<Perishable>() is Perishable perish)
             {
@@ -119,7 +120,7 @@ namespace Dataminer
                 holder.PerishTime = $"{t.Days} Days, {t.Hours} Hours, {t.Minutes} Minutes, {t.Seconds} Seconds";
             }
 
-            holder.CastType = (Character.SpellCastType)At.GetValue(typeof(Item), item, "m_activateEffectAnimType");
+            holder.CastType = (Character.SpellCastType)At.GetField(item, "m_activateEffectAnimType");
 
             if (item.GetComponent<ItemStats>() is ItemStats stats)
             {

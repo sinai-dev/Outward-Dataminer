@@ -6,6 +6,7 @@ using UnityEngine;
 using HarmonyLib;
 using System.Reflection;
 using System.Collections;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -44,7 +45,7 @@ namespace Dataminer
             {
                 var self = __instance;
 
-                Debug.Log(string.Format("{0} | {1} received {2} damage", Math.Round(Time.time, 1), self.Name, Math.Round(_damage, 2)));
+                SL.Log(string.Format("{0} | {1} received {2} damage", Math.Round(Time.time, 1), self.Name, Math.Round(_damage, 2)));
 
                 return true;
             }

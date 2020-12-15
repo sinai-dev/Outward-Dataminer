@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MapMagic;
+using SideLoader;
 using UnityEngine;
 
 namespace Dataminer
@@ -28,7 +29,7 @@ namespace Dataminer
             }
             else
             {
-                Debug.Log(type + " is not supported yet, sorry!");
+                SL.Log(type + " is not supported yet, sorry!");
                 return null;
             }
         }

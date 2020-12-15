@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Discord;
+using SideLoader;
 using UnityEngine;
 
 namespace Dataminer
@@ -25,14 +26,14 @@ namespace Dataminer
 
         public static void ParseAllRecipes()
         {
-            var recipes = (Dictionary<int, EnchantmentRecipe>)At.GetValue(typeof(RecipeManager), RecipeManager.Instance, "m_enchantmentRecipes");
+            var recipes = (Dictionary<int, EnchantmentRecipe>)At.GetField(RecipeManager.Instance, "m_enchantmentRecipes");
             if (recipes == null)
             {
-                Debug.Log("null enchantment dict!");
+                SL.Log("null enchantment dict!");
                 return;
             }
 
-            Debug.Log("Parsing Enchantments...");
+            SL.Log("Parsing Enchantments...");
 
             foreach (var recipe in recipes.Values)
             {
@@ -45,7 +46,7 @@ namespace Dataminer
 
                 if (!enchantment)
                 {
-                    Debug.Log("null enchantment!");
+                    SL.Log("null enchantment!");
                     continue;
                 }
 

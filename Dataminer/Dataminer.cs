@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using BepInEx;
 using HarmonyLib;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -63,7 +64,7 @@ namespace Dataminer
             [HarmonyPostfix]
             public static void Prefix(LocalizationManager __instance)
             {
-                var localizationData = At.GetValue(typeof(LocalizationManager), __instance, "m_localizationData") as LocalizationReference;
+                var localizationData = At.GetField(__instance, "m_localizationData") as LocalizationReference;
 
                 foreach (LocalizationReference.Localization loc in localizationData.Languages)
                 {
@@ -77,7 +78,7 @@ namespace Dataminer
 
         public static void Dump()
         {
-            Debug.LogWarning("[Dataminer] Starting full dump!");
+            SL.LogWarning("[Dataminer] Starting full dump!");
 
             // setup tags
             for (int i = 1; i < 500; i++)
@@ -98,7 +99,7 @@ namespace Dataminer
 
             ListManager.SaveEarlyLists();
 
-            Debug.LogWarning("Finished prefab dumping.");
+            SL.LogWarning("Finished prefab dumping.");
         }
     }
 }

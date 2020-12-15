@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -11,7 +12,7 @@ namespace Dataminer
 
         public override void SerializeEffect<T>(T effect, DM_Effect holder)
         {
-            (holder as DM_AffectFatigue).AffectQuantity = (float)At.GetValue(typeof(AffectNeed), effect, "m_affectQuantity");
+            (holder as DM_AffectFatigue).AffectQuantity = (float)At.GetField(effect as AffectNeed, "m_affectQuantity");
         }
     }
 }

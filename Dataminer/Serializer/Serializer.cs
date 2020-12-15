@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Reflection;
 using UnityEngine.SceneManagement;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -150,9 +151,9 @@ namespace Dataminer
                 {
                     if (logging)
                     {
-                        Debug.LogWarning($"Could not get DM_Assembly Type '{name}'");
-                        Debug.LogWarning(e.Message);
-                        Debug.LogWarning(e.StackTrace);
+                        SL.LogWarning($"Could not get DM_Assembly Type '{name}'");
+                        SL.LogWarning(e.Message);
+                        SL.LogWarning(e.StackTrace);
                     }
                 }
 
@@ -206,7 +207,7 @@ namespace Dataminer
             string path = dir + saveName + ".xml";
             if (File.Exists(path))
             {
-                //Debug.LogWarning("SaveToXml: A file already exists at " + path + "! Deleting...");
+                //SL.LogWarning("SaveToXml: A file already exists at " + path + "! Deleting...");
                 File.Delete(path);
             }
 

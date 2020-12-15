@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SideLoader;
 using UnityEngine;
 
 namespace Dataminer
@@ -56,34 +57,36 @@ namespace Dataminer
 
                     if (!NearlyEquals(data.Damage[0], autoData.Damage[0]))
                     {
-                        Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Damage is not AutoScaled!");
+                        SL.Log($"[ScaleChecking] {weapon.Name} ({weapon.ItemID}), Data[{i}], Damage is not AutoScaled!");
                         for (int j = 0; j < data.Damage.Count; j++)
                         {
-                            Debug.Log("Damage[" + j + "], Real: " + data.Damage[j] + " (autoscaled: " + autoData.Damage[j] + ")");
+                            SL.Log("Damage[" + j + "], Real: " + data.Damage[j] + " (autoscaled: " + autoData.Damage[j] + ")");
                         }
                     }
                     if (!NearlyEquals(data.Knockback, autoData.Knockback))
                     {
-                        Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Impact is not AutoScaled!");
-                        Debug.Log("Real: " + data.Knockback + ", autoscaled: " + autoData.Knockback);
+                        SL.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Impact is not AutoScaled!");
+                        SL.Log("Real: " + data.Knockback + ", autoscaled: " + autoData.Knockback);
                     }
                     if (!NearlyEquals(data.StamCost, autoData.StamCost))
                     {
-                        Debug.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], StaminaCost is not AutoScaled!");
-                        Debug.Log("Real: " + data.StamCost + ", autoscaled: " + autoData.StamCost);
+                        SL.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], StaminaCost is not AutoScaled!");
+                        SL.Log("Real: " + data.StamCost + ", autoscaled: " + autoData.StamCost);
                     }
                 }
             }
             catch { }
         }
 
-        private bool NearlyEquals(float f1, float f2, float margin = 0.05f)
+        private bool NearlyEquals(float a, float b, float margin = 0.05f)
         {
-            var diff = f1 - f2;
-            return diff > -margin && diff < margin;
+            return Math.Abs(a - b) < margin;
         }
 
-        #region Weapon Type AttackData Multipliers (not using)
+        #region Auto-scaling checking
+
+        // NOTE: THIS IS WRONG FOR LATEST PATCH, NEEDS FIX.
+
         public static WeaponStats.AttackData[] GetScaledAttackData(Weapon weapon)
         {
             var type = weapon.Type;

@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using System.Text.RegularExpressions;
 using System.IO;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -81,7 +82,7 @@ namespace Dataminer
 
         public static DM_Enemy ParseEnemy(Character character)
         {
-            Debug.Log("parsing enemy " + character.Name + " (" + character.gameObject.name + ")");
+            SL.Log("parsing enemy " + character.Name + " (" + character.gameObject.name + ")");
             var pos = character.transform.position;
 
             var enemyHolder = new DM_Enemy
@@ -118,7 +119,7 @@ namespace Dataminer
             }
             catch (Exception e)
             {
-                Debug.LogWarning("Exception parsing startingequipment of " + character.Name + ", messsage: " + e.Message);
+                SL.LogWarning("Exception parsing startingequipment of " + character.Name + ", messsage: " + e.Message);
             }
 
             // round stats nicely
@@ -162,11 +163,11 @@ namespace Dataminer
         private static void GetStatusImmunities(DM_Enemy enemyHolder, Character character)
         {
             // Immunities
-            foreach (TagSourceSelector tagSelector in At.GetValue(typeof(CharacterStats), character.Stats, "m_statusEffectsNaturalImmunity") as TagSourceSelector[])
+            foreach (TagSourceSelector tagSelector in At.GetField(character.Stats, "m_statusEffectsNaturalImmunity") as TagSourceSelector[])
             {
                 enemyHolder.Status_Immunities.Add(tagSelector.Tag.TagName);
             }
-            foreach (KeyValuePair<Tag, List<string>> entry in At.GetValue(typeof(CharacterStats), character.Stats, "m_statusEffectsImmunity") as Dictionary<Tag, List<string>>)
+            foreach (KeyValuePair<Tag, List<string>> entry in At.GetField(character.Stats, "m_statusEffectsImmunity") as Dictionary<Tag, List<string>>)
             {
                 if (entry.Value.Count > 0)
                 {
@@ -185,7 +186,7 @@ namespace Dataminer
                     dropWeapon = lootableOnDeath.DropWeapons;
                     dropPouch = lootableOnDeath.EnabledPouch;
 
-                    if (At.GetValue(typeof(LootableOnDeath), lootableOnDeath, "m_lootDroppers") is Dropable[] m_lootDroppers)
+                    if (At.GetField(lootableOnDeath, "m_lootDroppers") is Dropable[] m_lootDroppers)
                     {
                         foreach (Dropable dropper in m_lootDroppers)
                         {
@@ -196,7 +197,7 @@ namespace Dataminer
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("Exception parsing enemy droptable: " + e.Message);
+                    SL.LogError("Exception parsing enemy droptable: " + e.Message);
                 }
             }
         }
@@ -206,11 +207,11 @@ namespace Dataminer
         {
             if (character.Stats == null)
             {
-                Debug.LogError("Character stats is null!");
+                SL.LogError("Character stats is null!");
                 return;
             }
 
-            if (At.GetValue(typeof(CharacterStats), character.Stats, "m_healthRegen") is Stat healthRegen)
+            if (At.GetField(character.Stats, "m_healthRegen") is Stat healthRegen)
             {
                 enemyHolder.Health_Regen_Per_Second = healthRegen.BaseValue;
             }
@@ -232,9 +233,9 @@ namespace Dataminer
             //if (allResBonus == 1)
             //    allResBonus = 0;
 
-            var orig_DmgBonus = At.GetValue(typeof(CharacterStats), character.Stats, "m_damageTypesModifier") as Stat[];
-            var orig_Res = At.GetValue(typeof(CharacterStats), character.Stats, "m_damageResistance") as Stat[];
-            var orig_Prot = At.GetValue(typeof(CharacterStats), character.Stats, "m_damageProtection") as Stat[];
+            var orig_DmgBonus = At.GetField(character.Stats, "m_damageTypesModifier") as Stat[];
+            var orig_Res = At.GetField(character.Stats, "m_damageResistance") as Stat[];
+            var orig_Prot = At.GetField(character.Stats, "m_damageProtection") as Stat[];
 
             for (int i = 0; i < 6; i++)
             {
@@ -300,9 +301,9 @@ namespace Dataminer
                             enemyHolder.Impact_Resistance += stats.ImpactResistance;
                         }
 
-                        var damageBonus = At.GetValue(typeof(EquipmentStats), stats, "m_damageAttack") as float[];
-                        var damageRes = At.GetValue(typeof(EquipmentStats), stats, "m_damageResistance") as float[];
-                        var damageProt = At.GetValue(typeof(EquipmentStats), stats, "m_damageProtection") as float[];
+                        var damageBonus = At.GetField(stats, "m_damageAttack") as float[];
+                        var damageRes = At.GetField(stats, "m_damageResistance") as float[];
+                        var damageProt = At.GetField(stats, "m_damageProtection") as float[];
 
                         for (int i = 0; i < 6; i++)
                         {
@@ -317,7 +318,7 @@ namespace Dataminer
                     {
                         if (equipment is Ammunition)
                         {
-                            int count = (int)At.GetValue(typeof(Ammunition), equipment as Ammunition, "m_currentCapacity");
+                            int count = (int)At.GetField(equipment as Ammunition, "m_currentCapacity");
                             AddGuaranteedDrop(enemyHolder, equipment.ItemID, equipment.Name, count, -1, true);
                         }
                         else
@@ -399,7 +400,7 @@ namespace Dataminer
             }
             else
             {
-                Debug.LogWarning("Null stats for " + weapon.Name);
+                SL.LogWarning("Null stats for " + weapon.Name);
             }
         }
 
@@ -415,7 +416,7 @@ namespace Dataminer
                 {
                     if (enemyHolder.Equals(existingHolder))
                     {
-                        Debug.Log("Enemy was a copy of ID " + count);
+                        SL.Log("Enemy was a copy of ID " + count);
                         enemyHolder.Unique_ID = existingHolder.Unique_ID;
 
                         newVariant = false;
@@ -449,7 +450,7 @@ namespace Dataminer
         // Actual save
         private static void SaveEnemy(DM_Enemy holder)
         {
-            Debug.LogWarning(string.Format("Saving enemy '{0}' (unique ID: {1})", holder.Name, holder.Unique_ID));
+            SL.LogWarning(string.Format("Saving enemy '{0}' (unique ID: {1})", holder.Name, holder.Unique_ID));
 
             var dir = Serializer.Folders.Enemies;
             string saveName = holder.Name + " (" + holder.Unique_ID + ")";

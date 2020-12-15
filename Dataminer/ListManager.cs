@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using System.IO;
 using System.Xml.Serialization;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -39,13 +40,26 @@ namespace Dataminer
         internal void Awake()
         {
             Instance = this;
+
+            var allTags = TagSourceManager.Instance.DbTags;
+            for (int i = 0; i < 1000; i++)
+            {
+                if (i >= allTags.Count)
+                    break;
+
+                var tag = allTags[i];
+                //if (tag == Tag.None)
+                //    continue;
+
+                TagSources.Add(tag.ToString(), new List<string>());
+            }
         }
 
         //internal void Update()
         //{
         //    if (Input.GetKeyDown(KeyCode.ScrollLock))
         //    {
-        //        Debug.Log("Force saving lists");
+        //        SL.Log("Force saving lists");
         //        SaveLists();
         //    }
         //}
@@ -267,7 +281,7 @@ namespace Dataminer
             // ========== DropTables ==========
             File.WriteAllLines(Serializer.Folders.Lists + "/DropTables.txt", DropTables.Keys.ToArray());
 
-            Debug.Log("[Dataminer] List building complete!");
+            SL.Log("[Dataminer] List building complete!");
         }
     }
 }

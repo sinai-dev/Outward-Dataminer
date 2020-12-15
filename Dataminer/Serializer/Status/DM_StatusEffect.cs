@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
+using SideLoader;
 using UnityEngine;
 
 namespace Dataminer
@@ -37,9 +38,9 @@ namespace Dataminer
 
             string dir = Serializer.Folders.Effects;
 
-            if (At.GetValue(typeof(ResourcesPrefabManager), null, "EFFECTPRESET_PREFABS") is Dictionary<int, EffectPreset> dict)
+            if (References.RPM_EFFECT_PRESETS is Dictionary<int, EffectPreset> dict)
             {
-                Debug.Log("Parsing " + dict.Count + " EffectPresets!");
+                SL.Log("Parsing " + dict.Count + " EffectPresets!");
 
                 foreach (EffectPreset preset in dict.Values)
                 {
@@ -67,17 +68,17 @@ namespace Dataminer
             }
             else
             {
-                Debug.LogError("Could not find Effect Prefabs!");
+                SL.LogError("Could not find Effect Prefabs!");
             }
 
             int manualID = 1000;
-            if (At.GetValue(typeof(ResourcesPrefabManager), null, "STATUSEFFECT_PREFABS") is Dictionary<string, StatusEffect> statusDict)
+            if (References.RPM_STATUS_EFFECTS is Dictionary<string, StatusEffect> statusDict)
             {
-                Debug.Log("Parsing " + statusDict.Count + " StatusEffect Prefabs! (before dupe check)");
+                SL.Log("Parsing " + statusDict.Count + " StatusEffect Prefabs! (before dupe check)");
 
                 foreach (var status in statusDict.Values)
                 {
-                    //Debug.Log(status.name);
+                    //SL.Log(status.name);
 
                     if (string.IsNullOrEmpty(status.IdentifierName) || parsedIdentifiers.Contains(status.IdentifierName))
                     {
@@ -105,7 +106,7 @@ namespace Dataminer
         {
             var preset = status.GetComponent<EffectPreset>();
 
-            At.Call(typeof(StatusEffect), status, "OnAwake", null, new object[0]);
+            At.Invoke(status, "OnAwake");
 
             var template = (DM_StatusEffect)Activator.CreateInstance(Serializer.GetBestDMType(status.GetType()));
 
@@ -130,7 +131,7 @@ namespace Dataminer
 
             Tags = new List<string>();
             status.InitTags();
-            var tags = (List<Tag>)At.GetValue(typeof(StatusEffect), status, "m_tags");
+            var tags = (List<Tag>)At.GetField(status, "m_tags");
             foreach (var tag in tags)
             {
                 Tags.Add(tag.TagName);
@@ -172,9 +173,9 @@ namespace Dataminer
 
         public static void GetStatusLocalization(StatusEffect effect, out string name, out string desc)
         {
-            var namekey = (string)At.GetValue(typeof(StatusEffect), effect, "m_nameLocKey");
+            var namekey = (string)At.GetField(effect, "m_nameLocKey");
             name = LocalizationManager.Instance.GetLoc(namekey);
-            var desckey = (string)At.GetValue(typeof(StatusEffect), effect, "m_descriptionLocKey");
+            var desckey = (string)At.GetField(effect, "m_descriptionLocKey");
             desc = LocalizationManager.Instance.GetLoc(desckey);
         }
     }

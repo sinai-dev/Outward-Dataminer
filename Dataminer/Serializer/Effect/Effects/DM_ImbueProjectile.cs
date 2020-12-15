@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
+using System.Threading.Tasks;
 
 namespace Dataminer
 {
-    public class DM_ImbueWeapon : DM_ImbueObject
+    public class DM_ImbueProjectile : DM_ImbueObject
     {
-        public Weapon.WeaponSlot Imbue_Slot;
+        public bool UnloadProjectile;
 
         public override void SerializeEffect<T>(T effect, DM_Effect holder)
         {
             base.SerializeEffect(effect, holder);
 
-            Imbue_Slot = (effect as ImbueWeapon).AffectSlot;
+            UnloadProjectile = (effect as ImbueProjectile).UnloadProjectile;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SideLoader;
 using UnityEngine;
 
 namespace Dataminer
@@ -22,11 +23,11 @@ namespace Dataminer
                 ItemID = gatherable.ItemID
             };
 
-            if (At.GetValue(typeof(SelfFilledItemContainer), gatherable, "m_drops") is List<Dropable> droppers)
+            if (At.GetField(gatherable as SelfFilledItemContainer, "m_drops") is List<Dropable> droppers)
             {
                 if (droppers == null || droppers.Count < 1)
                 {
-                    //Debug.LogWarning("droppers is null or list count is 0!");
+                    //SL.LogWarning("droppers is null or list count is 0!");
                 }
                 else
                 {

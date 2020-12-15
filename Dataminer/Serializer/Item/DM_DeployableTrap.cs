@@ -16,12 +16,12 @@ namespace Dataminer
 
             var trap = item as DeployableTrap;
 
-            var recipes = (TrapEffectRecipe[])At.GetValue(typeof(DeployableTrap), trap, "m_trapRecipes");
+            var recipes = (TrapEffectRecipe[])At.GetField(trap, "m_trapRecipes");
 
             foreach (var recipe in recipes)
             {
                 var dmRecipe = new DM_TrapRecipe();
-                dmRecipe.Serialize(recipe);
+                dmRecipe.Serialize(recipe, trap);
                 TrapRecipeEffects.Add(dmRecipe);
             }
         }
@@ -29,26 +29,43 @@ namespace Dataminer
 
     public class DM_TrapRecipe
     {
-        //public List<int> CompatibleItemIDs = new List<int>();
         public List<string> CompatibleItemIDs = new List<string>();
         public List<string> CompatibleItemTags = new List<string>();
 
         public List<DM_Effect> StandardEffects;
         public List<DM_Effect> HiddenEffects;
 
-        public void Serialize(TrapEffectRecipe recipe)
+        public void Serialize(TrapEffectRecipe recipe, DeployableTrap trap)
         {
-            var items = (Item[])At.GetValue(typeof(TrapEffectRecipe), recipe, "m_compatibleItems");
+            var items = (Item[])At.GetField(recipe, "m_compatibleItems");
+            var tags = (TagSourceSelector[])At.GetField(recipe, "m_compatibleTags");
+
+            trap.GetCompatibleFilters();
+
+            var compatibleTags = ((List<Tag>[])At.GetField<DeployableTrap>("COMPATIBLE_TAGS"))[(int)trap.CurrentTrapType];
+
             if (items != null)
             {
                 foreach (var item in items)
                 {
-                    // this.CompatibleItemIDs.Add(item.ItemID);
+                    switch (trap.CurrentTrapType)
+                    {
+                        case DeployableTrap.TrapType.PressurePlateTrap:
+                            if (!item.HasTag(TagSourceManager.PlateTrapComponent) && !HasAnyTag(item, compatibleTags))
+                                continue;
+                            break;
+
+                        case DeployableTrap.TrapType.TripWireTrap:
+                            if (!item.HasTag(TagSourceManager.TripWireTrapComponent) && !HasAnyTag(item, compatibleTags))
+                                continue;
+                            break;
+                    }
+
                     this.CompatibleItemIDs.Add(item.Name);
                 }
             }
 
-            var tags = (TagSourceSelector[])At.GetValue(typeof(TrapEffectRecipe), recipe, "m_compatibleTags");
+            
             if (tags != null)
             {
                 foreach (var tag in tags)
@@ -73,6 +90,17 @@ namespace Dataminer
                     this.HiddenEffects.Add(DM_Effect.ParseEffect(effect));
                 }
             }
+        }
+
+        internal bool HasAnyTag(Item item, IEnumerable<Tag> tags)
+        {
+            foreach (var tag in tags)
+            {
+                if (item.HasTag(tag))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

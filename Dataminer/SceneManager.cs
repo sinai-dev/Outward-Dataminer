@@ -11,6 +11,7 @@ using NodeCanvas.Framework;
 using NodeCanvas.Tasks.Actions;
 using NodeCanvas.BehaviourTrees;
 using NodeCanvas.DialogueTrees;
+using SideLoader;
 
 namespace Dataminer
 {
@@ -36,7 +37,7 @@ namespace Dataminer
                 {
                     if (CharacterManager.Instance.GetFirstLocalCharacter() != null)
                     {
-                        Debug.Log("___________ Starting Scenes Parse ___________");
+                        SL.Log("___________ Starting Scenes Parse ___________");
                         m_coroutine = StartCoroutine(ParseCoroutine());
                         m_parsing = true;
                     }
@@ -47,7 +48,7 @@ namespace Dataminer
 
                     if (m_coroutine != null)
                     {
-                        Debug.Log("___________ Stopping Scenes Parse ___________");
+                        SL.Log("___________ Stopping Scenes Parse ___________");
                         StopCoroutine(m_coroutine);
                     }
                 }
@@ -58,7 +59,7 @@ namespace Dataminer
         {
             foreach (string sceneName in SceneHelper.SceneBuildNames.Keys)
             {
-                Debug.Log("--- Parsing " + sceneName + " ---");
+                SL.Log("--- Parsing " + sceneName + " ---");
 
                 /*        Load Scene        */
 
@@ -71,7 +72,7 @@ namespace Dataminer
                     while (NetworkLevelLoader.Instance.IsGameplayPaused || NetworkLevelLoader.Instance.InLoading)
                     {
                         NetworkLevelLoader loader = NetworkLevelLoader.Instance;
-                        At.SetValue(true, typeof(NetworkLevelLoader), loader, "m_continueAfterLoading");
+                        At.SetField(loader, "m_continueAfterLoading", true);
 
                         yield return new WaitForSeconds(1f);
                     }
@@ -93,15 +94,15 @@ namespace Dataminer
                 // Parse Loot (+ item sources)
                 ParseAllLoot();
 
-                Debug.Log("--- Finished Scene: " + SceneManagerHelper.ActiveSceneName + " ---");
+                SL.Log("--- Finished Scene: " + SceneManagerHelper.ActiveSceneName + " ---");
             }
 
-            Debug.Log("___________ Finished Scenes Parse ___________");
+            SL.Log("___________ Finished Scenes Parse ___________");
 
-            Debug.Log("[Dataminer] Saving lists...");
+            SL.Log("[Dataminer] Saving lists...");
             ListManager.SaveLists();
 
-            Debug.Log("[Dataminer] Finished.");
+            SL.Log("[Dataminer] Finished.");
         }
 
         
@@ -149,7 +150,7 @@ namespace Dataminer
                     }
                     else
                     {
-                        Debug.LogWarning("[ParseLoot] Unsupported ItemContainer: " + item.Name + ", typeof: " + item.GetType());
+                        SL.LogWarning("[ParseLoot] Unsupported ItemContainer: " + item.Name + ", typeof: " + item.GetType());
                     }
                 }
                 else
@@ -257,7 +258,7 @@ namespace Dataminer
                 }
                 else
                 {
-                    Debug.LogWarning("Could not get region!");
+                    SL.LogWarning("Could not get region!");
                     return SceneManagerHelper.ActiveSceneName;
                 }
             }

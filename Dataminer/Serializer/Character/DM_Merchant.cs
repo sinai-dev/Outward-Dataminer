@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SideLoader;
 using UnityEngine;
 
 namespace Dataminer
@@ -25,16 +26,16 @@ namespace Dataminer
                 UID = merchant.HolderUID
             };
 
-            if (At.GetValue(typeof(Merchant), merchant, "m_dropableInventory") is Dropable dropper)
+            if (At.GetField(merchant, "m_dropableInventory") is Dropable dropper)
             {
                 merchantHolder.DropTable = DM_DropTable.ParseDropTable(dropper, merchant);
             }
 
-            foreach (PriceModifier priceMod in merchant.GetComponentsInChildren<PriceModifier>())
+            foreach (var priceMod in merchant.GetComponentsInChildren<PriceModifier>())
             {
                 if (priceMod.BuyMultiplierAdded != 0f || priceMod.SellMultiplierAdded != 0f)
                 {
-                    //Debug.Log("Merchant " + merchantHolder.Name + " has buy or sell mods! Buy: " + priceMod.BuyMultiplierAdded + ", Sell: " + priceMod.SellMultiplierAdded);
+                    //SL.Log("Merchant " + merchantHolder.Name + " has buy or sell mods! Buy: " + priceMod.BuyMultiplierAdded + ", Sell: " + priceMod.SellMultiplierAdded);
                     merchantHolder.BuyModifiers.Add(priceMod.BuyMultiplierAdded);
                     merchantHolder.SellModifiers.Add(priceMod.SellMultiplierAdded);
                 }
