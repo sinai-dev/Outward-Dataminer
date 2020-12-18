@@ -9,11 +9,13 @@ namespace Dataminer
     {
         public float Durability;
         public EquipmentSlot.EquipmentSlotIDs EquipmentSlot;
+        public bool Percentage;
 
         public override void SerializeEffect<T>(T effect, DM_Effect holder)
         {
-            (holder as DM_ReduceDurability).EquipmentSlot = (effect as ReduceDurability).EquipmentSlot;
-            (holder as DM_ReduceDurability).Durability = (effect as ReduceDurability).Durability;
+            EquipmentSlot = (effect as ReduceDurability).EquipmentSlot;
+            Durability = (effect as ReduceDurability).Durability;
+            Percentage = (effect as ReduceDurability).Percentage;
         }
     }
 }

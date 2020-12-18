@@ -17,14 +17,17 @@ namespace Dataminer
         public List<DropTableEntry> Guaranteed_Drops = new List<DropTableEntry>();
         public List<DropGeneratorHolder> Random_Tables = new List<DropGeneratorHolder>();
 
-        public static DM_DropTable ParseDropTable(Dropable dropper, Merchant merchant = null, string containerName = "")
+        public static DM_DropTable ParseDropable(Dropable dropper, Merchant merchant = null, string containerName = "")
         {
+            if (!dropper)
+                return null;
+
             var dropTableHolder = new DM_DropTable
             {
                 Name = dropper.name
             };
 
-            if (dropTableHolder.Name == "InventoryTable" && merchant != null)
+            if (dropTableHolder.Name == "InventoryTable" && merchant)
             {
                 dropTableHolder.Name = SceneManager.Instance.GetCurrentLocation(merchant.transform.position) + " - " + merchant.ShopName;
             }
@@ -37,14 +40,15 @@ namespace Dataminer
                     {
                         foreach (BasicItemDrop gItemDrop in gItemDrops)
                         {
+                            if (!gItemDrop.DroppedItem)
+                                continue;
+
                             var pos = dropper.transform.position;
                             AddGuaranteedDrop(dropTableHolder,
                                 gItemDrop.DroppedItem.ItemID,
                                 gItemDrop.DroppedItem.Name,
                                 gItemDrop.MinDropCount,
-                                gItemDrop.MaxDropCount,
-                                containerName,
-                                pos);
+                                gItemDrop.MaxDropCount);
                         }
                     }
                 }
@@ -54,69 +58,23 @@ namespace Dataminer
             {
                 foreach (DropTable table in dropTables)
                 {
-                    var generatorHolder = new DropGeneratorHolder
+                    if (ParseDropTable(dropTableHolder, containerName, dropper, table) is DropGeneratorHolder generatorHolder)
                     {
-                        MinNumberOfDrops = table.MinNumberOfDrops,
-                        MaxNumberOfDrops = table.MaxNumberOfDrops,
-                        MaxDiceValue = (int)At.GetField(table, "m_maxDiceValue"),
-                    };
-
-                    if (At.GetField(table, "m_dropAmount") is SimpleRandomChance dropAmount)
-                    {
-                        generatorHolder.ChanceReduction = dropAmount.ChanceReduction;
-                        generatorHolder.ChanceRegenQty = dropAmount.ChanceRegenQty;
-                        if (dropAmount.CanRegen)
-                        {
-                            generatorHolder.RegenTime = dropAmount.ChanceRegenDelay;
-                        }
-                        else
-                        {
-                            generatorHolder.RegenTime = -1;
-                        }
+                        dropTableHolder.Random_Tables.Add(generatorHolder);
                     }
-                    else
+                }
+            }
+
+            if (At.GetField(dropper, "m_conditionalDropTables") is List<ConditionalDropTable> conditionals)
+            {
+                foreach (var conTable in conditionals)
+                {
+                    if (ParseDropTable(dropTableHolder, containerName, dropper, conTable.Dropper) is DropGeneratorHolder generatorHolder)
                     {
-                        generatorHolder.RegenTime = -1;
+                        generatorHolder.DropConditionType = conTable.DropCondition.GetType().FullName;
+
+                        dropTableHolder.Random_Tables.Add(generatorHolder);
                     }
-
-                    if (At.GetField(table, "m_emptyDropChance") is int i)
-                    {
-                        decimal emptyChance = (decimal)i / generatorHolder.MaxDiceValue;
-                        generatorHolder.EmptyDrop = (float)emptyChance * 100;
-                    }
-
-                    if (At.GetField(table, "m_itemDrops") is List<ItemDropChance> itemDrops)
-                    {
-                        foreach (ItemDropChance dropChance in itemDrops)
-                        {
-                            float percentage = (float)((decimal)dropChance.DropChance / generatorHolder.MaxDiceValue) * 100f;
-
-                            percentage = (float)Math.Round(percentage, 2);
-
-                            if (percentage >= 100)
-                            {
-                                AddGuaranteedDrop(dropTableHolder, dropChance.DroppedItem.ItemID, dropChance.DroppedItem.Name,
-                                    dropChance.MaxDropCount, dropChance.MinDropCount, containerName, dropper.transform.position);
-                            }
-                            else
-                            {
-                                generatorHolder.Item_Drops.Add(new DropTableChanceEntry
-                                {
-                                    Item_ID = dropChance.DroppedItem.ItemID,
-                                    Item_Name = dropChance.DroppedItem.Name,
-                                    Min_Quantity = dropChance.MinDropCount,
-                                    Max_Quantity = dropChance.MaxDropCount,
-                                    Drop_Chance = percentage,
-                                    Dice_Range = dropChance.MaxDiceRollValue - dropChance.MinDiceRollValue,
-                                    ChanceReduction = dropChance.ChanceReduction,
-                                    ChanceRegenDelay = dropChance.ChanceRegenDelay,
-                                    ChanceRegenQty = dropChance.ChanceRegenQty
-                                });
-                            }
-                        }
-                    }
-
-                    dropTableHolder.Random_Tables.Add(generatorHolder);
                 }
             }
 
@@ -133,7 +91,7 @@ namespace Dataminer
             return dropTableHolder;
         }
 
-        private static void AddGuaranteedDrop(DM_DropTable dropTableHolder, int item_ID, string item_Name, int min_Qty, int max_Qty, string containerName, Vector3 pos)
+        private static void AddGuaranteedDrop(DM_DropTable dropTableHolder, int item_ID, string item_Name, int min_Qty, int max_Qty)
         {
             // check if we already have this guaranteed drop, if so add to quantity
             bool newDrop = true;
@@ -163,6 +121,73 @@ namespace Dataminer
             }
         }
 
+        public static DropGeneratorHolder ParseDropTable(DM_DropTable dropTableHolder, string containerName, Dropable dropper, DropTable table)
+        {
+            var generatorHolder = new DropGeneratorHolder
+            {
+                MinNumberOfDrops = table.MinNumberOfDrops,
+                MaxNumberOfDrops = table.MaxNumberOfDrops,
+                MaxDiceValue = (int)At.GetField(table, "m_maxDiceValue"),
+            };
+
+            if (At.GetField(table, "m_dropAmount") is SimpleRandomChance dropAmount)
+            {
+                generatorHolder.ChanceReduction = dropAmount.ChanceReduction;
+                generatorHolder.ChanceRegenQty = dropAmount.ChanceRegenQty;
+
+                if (dropAmount.CanRegen)
+                    generatorHolder.RegenTime = dropAmount.ChanceRegenDelay;
+                else
+                    generatorHolder.RegenTime = -1;
+            }
+            else
+            {
+                generatorHolder.RegenTime = -1;
+            }
+
+            if (At.GetField(table, "m_emptyDropChance") is int i)
+            {
+                decimal emptyChance = (decimal)i / generatorHolder.MaxDiceValue;
+                generatorHolder.EmptyDrop = (float)emptyChance * 100;
+            }
+
+            if (At.GetField(table, "m_itemDrops") is List<ItemDropChance> itemDrops)
+            {
+                foreach (ItemDropChance dropChance in itemDrops)
+                {
+                    if (!dropChance.DroppedItem)
+                        continue;
+
+                    float percentage = (float)((decimal)dropChance.DropChance / generatorHolder.MaxDiceValue) * 100f;
+
+                    percentage = (float)Math.Round(percentage, 2);
+
+                    if (percentage >= 100)
+                    {
+                        AddGuaranteedDrop(dropTableHolder, dropChance.DroppedItem.ItemID, dropChance.DroppedItem.Name,
+                            dropChance.MaxDropCount, dropChance.MinDropCount);
+                    }
+                    else
+                    {
+                        generatorHolder.Item_Drops.Add(new DropTableChanceEntry
+                        {
+                            Item_ID = dropChance.DroppedItem.ItemID,
+                            Item_Name = dropChance.DroppedItem.Name,
+                            Min_Quantity = dropChance.MinDropCount,
+                            Max_Quantity = dropChance.MaxDropCount,
+                            Drop_Chance = percentage,
+                            Dice_Range = dropChance.MaxDiceRollValue - dropChance.MinDiceRollValue,
+                            ChanceReduction = dropChance.ChanceReduction,
+                            ChanceRegenDelay = dropChance.ChanceRegenDelay,
+                            ChanceRegenQty = dropChance.ChanceRegenQty
+                        });
+                    }
+                }
+            }
+
+            return generatorHolder;
+        }
+
         public class DropGeneratorHolder
         {
             public int MinNumberOfDrops;
@@ -175,6 +200,8 @@ namespace Dataminer
             public int ChanceRegenQty;
 
             public List<DropTableChanceEntry> Item_Drops = new List<DropTableChanceEntry>();
+
+            public string DropConditionType;
         }
     }
 }

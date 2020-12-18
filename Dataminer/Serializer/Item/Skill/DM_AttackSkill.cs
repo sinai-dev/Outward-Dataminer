@@ -13,21 +13,24 @@ namespace Dataminer
         public List<string> RequiredWeaponTags = new List<string>();
         public bool RequireImbue;
 
+        public int AmmunitionAmount;
+
         public override void SerializeItem(Item item, DM_Item holder)
         {
             base.SerializeItem(item, holder);
 
-            var template = holder as DM_AttackSkill;
             var attackSkill = item as AttackSkill;
 
-            template.AmmunitionTypes = attackSkill.AmmunitionTypes;
-            template.RequiredOffHandTypes = attackSkill.RequiredOffHandTypes;
-            template.RequiredWeaponTypes = attackSkill.RequiredWeaponTypes;
-            template.RequireImbue = attackSkill.RequireImbue;
+            AmmunitionTypes = attackSkill.AmmunitionTypes;
+            RequiredOffHandTypes = attackSkill.RequiredOffHandTypes;
+            RequiredWeaponTypes = attackSkill.RequiredWeaponTypes;
+            RequireImbue = attackSkill.RequireImbue;
+
+            AmmunitionAmount = attackSkill.AmmunitionAmount;
 
             foreach (var tag in attackSkill.RequiredTags)
             {
-                template.RequiredWeaponTags.Add(tag.Tag.TagName);
+                RequiredWeaponTags.Add(tag.Tag.TagName);
             }
         }
     }

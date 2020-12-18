@@ -18,6 +18,8 @@ namespace Dataminer
 
         public Recipe.CraftingType StationType = Recipe.CraftingType.Survival;
 
+        public PlayerSystem.PlayerTypes RequiredPType;
+
         public List<string> Ingredients = new List<string>();
         public List<ItemQty> Results = new List<ItemQty>();
 
@@ -27,24 +29,39 @@ namespace Dataminer
             {
                 foreach (Recipe recipe in recipes.Values)
                 {
-                    var recipeHolder = ParseRecipe(recipe);
+                    int id = recipe.RecipeID;
+                    if (id == 0)
+                    {
+                        if (int.TryParse(recipe.name.Substring(0, 3), out int id2))
+                            id = id2;
+                    }
+                    var key = id.ToString();
+
+                    if (ListManager.Recipes.ContainsKey(key))
+                    {
+                        SL.LogWarning("Recipe list already contains ID " + key + ", skipping this recipe: " + recipe.name);
+                        continue;
+                    }
+
+                    var recipeHolder = ParseRecipe(recipe, id);
 
                     string dir = Serializer.Folders.Recipes;
                     string saveName = recipeHolder.Name + " (" + recipeHolder.RecipeID + ")";
 
-                    ListManager.Recipes.Add(recipeHolder.RecipeID.ToString(), recipeHolder);
+                    ListManager.Recipes.Add(key, recipeHolder);
                     Serializer.SaveToXml(dir, saveName, recipeHolder);
                 }
             }
         }
 
-        public static DM_Recipe ParseRecipe(Recipe recipe)
+        public static DM_Recipe ParseRecipe(Recipe recipe, int id)
         {
             var recipeHolder = new DM_Recipe
             {
                 Name = recipe.Name,
-                RecipeID = recipe.RecipeID,
+                RecipeID = id,
                 StationType = recipe.CraftingStationType,
+                RequiredPType = recipe.RequiredPType,
             };
 
             foreach (RecipeIngredient ingredient in recipe.Ingredients)

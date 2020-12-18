@@ -35,11 +35,14 @@ namespace Dataminer
             var template = holder as DM_Summon;
             var comp = effect as Summon;
 
+            if (comp == null)
+                return;
+
             if (effect is SummonAI)
             {
                 template.SummonPrefabType = PrefabTypes.Resource;
 
-                var name = comp.SummonedPrefab.name.Replace("(Clone)", "").Trim();
+                var name = comp.SummonedPrefab?.name.Replace("(Clone)", "").Trim();
 
                 template.Prefab = name;
             }
@@ -47,7 +50,7 @@ namespace Dataminer
             {
                 template.SummonPrefabType = PrefabTypes.Item;
 
-                template.Prefab = comp.SummonedPrefab.gameObject.GetComponent<Item>().ItemID.ToString();
+                template.Prefab = comp.SummonedPrefab?.gameObject.GetComponent<Item>()?.ItemID.ToString() ?? comp.SummonedPrefab?.name;
             }
 
             template.BufferSize = comp.BufferSize;

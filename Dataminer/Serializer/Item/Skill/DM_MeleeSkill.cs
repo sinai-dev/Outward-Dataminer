@@ -8,6 +8,8 @@ namespace Dataminer
     public class DM_MeleeSkill : DM_AttackSkill
     {
         public bool Blockable;
+        public bool NoWeaponAtkTag;
+
         public float Damage;
         public float Impact;
         public int LinecastCount;
@@ -19,17 +21,17 @@ namespace Dataminer
             base.SerializeItem(item, holder);
 
             var skill = item as MeleeSkill;
-            var template = holder as DM_MeleeSkill;
 
-            template.Blockable = skill.Blockable;
+            Blockable = skill.Blockable;
+            NoWeaponAtkTag = skill.NoWeaponAtkTag;
 
             if (skill.MeleeHitDetector is MeleeHitDetector detector)
             {
-                template.Damage = detector.Damage;
-                template.Impact = detector.Impact;
-                template.LinecastCount = detector.LinecastCount;
-                template.Radius = detector.Radius;
-                template.Unblockable = detector.Unblockable;
+                Damage = detector.Damage;
+                Impact = detector.Impact;
+                LinecastCount = detector.LinecastCount;
+                Radius = detector.Radius;
+                Unblockable = detector.Unblockable;
             }
         }
     }

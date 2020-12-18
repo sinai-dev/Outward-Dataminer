@@ -28,7 +28,7 @@ namespace Dataminer
 
             if (At.GetField(merchant, "m_dropableInventory") is Dropable dropper)
             {
-                merchantHolder.DropTable = DM_DropTable.ParseDropTable(dropper, merchant);
+                merchantHolder.DropTable = DM_DropTable.ParseDropable(dropper, merchant);
             }
 
             foreach (var priceMod in merchant.GetComponentsInChildren<PriceModifier>())

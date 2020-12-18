@@ -16,9 +16,12 @@ namespace Dataminer
 
         public static DM_EffectCondition ParseCondition(EffectCondition component)
         {
+            if (component == null)
+                return null;
+
             var type = component.GetType();
 
-            if (Serializer.GetDMType(type) is Type DM_type)
+            if (Serializer.GetDMType(type) is Type DM_type && typeof(DM_EffectCondition).IsAssignableFrom(DM_type))
             {
                 var holder = Activator.CreateInstance(DM_type) as DM_EffectCondition;
 

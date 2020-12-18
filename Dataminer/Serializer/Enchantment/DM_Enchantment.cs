@@ -24,6 +24,8 @@ namespace Dataminer
         public float ManaAbsorbRatio;
         public float StaminaAbsorbRatio;
 
+        public float GlobalStatusResistance;
+
         public bool Indescructible;
         public float TrackDamageRatio;
 
@@ -37,6 +39,8 @@ namespace Dataminer
                 HealthAbsorbRatio = enchantment.HealthAbsorbRatio,
                 ManaAbsorbRatio = enchantment.ManaAbsorbRatio,
                 StaminaAbsorbRatio = enchantment.StaminaAbsorbRatio,
+
+                GlobalStatusResistance = enchantment.GlobalStatusResistance,
 
                 Indescructible = enchantment.Indestructible,
                 TrackDamageRatio = enchantment.TrackDamageRatio,

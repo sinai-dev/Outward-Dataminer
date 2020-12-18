@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Dataminer
 {
-    public class DM_AddBoonEffect : DM_AddStatusEffect
+    public class DM_WeaponDamageTargetHealth : DM_WeaponDamage
     {
-        public string AmplifiedEffect = "";
+        public Vector2 MultiplierHighLowHP;
 
         public override void SerializeEffect<T>(T effect, DM_Effect holder)
         {
             base.SerializeEffect(effect, holder);
 
-            (holder as DM_AddBoonEffect).AmplifiedEffect = (effect as AddBoonEffect).BoonAmplification?.IdentifierName;
+            MultiplierHighLowHP = (effect as WeaponDamageTargetHealth).MultiplierHighLowHP;
         }
     }
 }

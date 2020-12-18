@@ -12,16 +12,17 @@ namespace Dataminer
         public List<Damages> Damages_AI = new List<Damages>();
         public float Knockback;
         public bool HitInventory;
+        public bool IgnoreHalfResistances;
 
         public override void SerializeEffect<T>(T effect, DM_Effect holder)
         {
             var puncDamage = effect as PunctualDamage;
-            var puncHolder = holder as DM_PunctualDamage;
 
-            puncHolder.Knockback = puncDamage.Knockback;
-            puncHolder.HitInventory = puncDamage.HitInventory;
-            puncHolder.Damage = Damages.ParseDamageArray(puncDamage.Damages);
-            puncHolder.Damages_AI = Damages.ParseDamageArray(puncDamage.DamagesAI);
+            Knockback = puncDamage.Knockback;
+            HitInventory = puncDamage.HitInventory;
+            Damage = Damages.ParseDamageArray(puncDamage.Damages);
+            Damages_AI = Damages.ParseDamageArray(puncDamage.DamagesAI);
+            IgnoreHalfResistances = puncDamage.IgnoreHalfResistances;
         }
     }
 }

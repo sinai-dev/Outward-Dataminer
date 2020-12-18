@@ -13,20 +13,25 @@ namespace Dataminer
         public float DurabilityCost;
         public float DurabilityCostPercent;
 
+        public float HealthCost;
+        public PlayerSystem.PlayerTypes RequiredPType;
+
         public List<SkillItemReq> RequiredItems = new List<SkillItemReq>();
 
         public override void SerializeItem(Item item, DM_Item holder)
         {
             base.SerializeItem(item, holder);
 
-            var skillHolder = holder as DM_Skill;
             var skill = item as Skill;
 
-            skillHolder.Cooldown = skill.Cooldown;
-            skillHolder.StaminaCost = skill.StaminaCost;
-            skillHolder.ManaCost = skill.ManaCost;
-            skillHolder.DurabilityCost = skill.DurabilityCost;
-            skillHolder.DurabilityCostPercent = skill.DurabilityCostPercent;
+            Cooldown = skill.Cooldown;
+            StaminaCost = skill.StaminaCost;
+            ManaCost = skill.ManaCost;
+            DurabilityCost = skill.DurabilityCost;
+            DurabilityCostPercent = skill.DurabilityCostPercent;
+
+            HealthCost = skill.HealthCost;
+            RequiredPType = skill.RequiredPType;
 
             if (skill.RequiredItems != null)
             {
@@ -34,7 +39,7 @@ namespace Dataminer
                 {
                     if (itemReq.Item != null)
                     {
-                        skillHolder.RequiredItems.Add(new SkillItemReq
+                        RequiredItems.Add(new SkillItemReq
                         {
                             ItemID = itemReq.Item.ItemID,
                             Consume = itemReq.Consume,

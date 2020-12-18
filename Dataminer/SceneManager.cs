@@ -31,6 +31,11 @@ namespace Dataminer
 
         internal void Update()
         {
+            if (Input.GetKeyDown(KeyCode.ScrollLock))
+            {
+                DM_Merchant.ParseAllMerchants();
+            }
+
             if (Input.GetKeyDown(KeyCode.Pause))
             {
                 if (!m_parsing)
@@ -212,6 +217,8 @@ namespace Dataminer
                     region = "Hallowed Marsh";
                 if (SceneManagerHelper.ActiveSceneName.ToLower().Contains("antique"))
                     region = "Antique Plateau";
+                if (SceneManagerHelper.ActiveSceneName.ToLower().Contains("caldera"))
+                    region = "Caldera";
             }
             return region;
         }
@@ -240,6 +247,8 @@ namespace Dataminer
                         dict = SceneHelper.AbrassarDungeons; break;
                     case "Antique Plateau":
                         dict = SceneHelper.AntiqueDungeons; break;
+                    case "Caldera":
+                        dict = SceneHelper.CalderaDungeons; break;
                     default: break;
                 }
 

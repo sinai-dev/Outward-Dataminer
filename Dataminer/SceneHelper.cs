@@ -36,6 +36,9 @@ namespace Dataminer
                     case "Antique Plateau":
                         list = AntiqueDungeons.Keys.ToList();
                         break;
+                    case "Caldera":
+                        list = CalderaDungeons.Keys.ToList();
+                        break;
                     default:
                         break;
                 }
@@ -113,6 +116,20 @@ namespace Dataminer
             { "AntiqueField_Dungeon9",              "Old Harmattan" },
             { "AntiqueFieldDungeonsBosses",         "Unknown Arena" },
             { "AntiqueFieldDungeonsSmall",          "Harmattan Misc. Dungeons" },
+            { "NewSirocco",                         "New Sirocco" },                    // THE THREE BROTHERS DLC
+            { "Caldera",                            "Caldera" },
+            { "Caldera_Dungeon1",                   "Steam Bath Tunnels" },
+            { "Caldera_Dungeon2",                   "Sulphuric Caverns" },
+            { "Caldera_Dungeon3",                   "The Eldest Brother" },
+            { "Caldera_Dungeon4",                   "Scarlet Sanctuary" },
+            { "Caldera_Dungeon5",                   "The Grotto of Chalcedony" },
+            { "Caldera_Dungeon6",                   "Myrmitaur’s Haven" },
+            { "Caldera_Dungeon7",                   "Oil Refinery" },
+            { "Caldera_Dungeon8",                   "The Vault of Stone" },
+            { "Caldera_Dungeon9",                   "Old Sirocco" },
+            { "Caldera_Dungeon10",                  "Ark of the Exiled" },
+            { "CalderaDungeonsBosses",              "Unknown Arena" },
+            { "CalderaDungeonsSmall",               "Caldera Misc. Dungeons" },
         };
 
         public static Dictionary<string, List<string>> ScenesByRegion = new Dictionary<string, List<string>>
@@ -199,6 +216,24 @@ namespace Dataminer
                 }
             },
             {
+                "Caldera",
+                new List<string>
+                {
+                    "New Sirocco",
+                    "Caldera",
+                    "Steam Bath Tunnels",
+                    "Sulphuric Caverns",
+                    "The Eldest Brother",
+                    "Scarlet Sanctuary",
+                    "The Grotto of Chalcedony",
+                    "Myrmitaur’s Haven",
+                    "Oil Refinery",
+                    "The Vault of Stone",
+                    "Old Sirocco",
+                    "Ark of the Exiled",
+                }
+            },
+            {
                 "Other",
                 new List<string>
                 {
@@ -268,6 +303,20 @@ namespace Dataminer
              { "Old Harmattan Basement",  new Vector3(1500, 0, 0)},
              { "Corrupted Cave",          new Vector3(1800, 0, 0)},
              { "Wendigo Lair",            new Vector3(2100, 0, 0)},
+        };
+
+        public static Dictionary<string, Vector3> CalderaDungeons = new Dictionary<string, Vector3>
+        {
+            { "Oily Cavern",            new Vector3(0, 0, 0) },
+            { "Calygrey Colosseum",     new Vector3(300, 0, 0) },
+            { "New Sirocco Mines",      new Vector3(600, 0, 0) },
+            { "Immaculate’s Refuge",    new Vector3(900, 0, 0) },
+            { "Silkworm’s Refuge",      new Vector3(1200, 0, 0) },
+            { "Giant’s Sauna",          new Vector3(1500, 0, 0) },
+            { "The Tower of Regrets",   new Vector3(1800, 0, 0) },
+            { "Underside Loading Dock", new Vector3(2100, 0, 0) },
+            { "The River of Red",       new Vector3(2400, 0, 0) },
+            { "Ritualist’s hut",        new Vector3(2700, 0, 0) },
         };
     }
 }

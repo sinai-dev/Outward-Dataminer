@@ -26,6 +26,10 @@ namespace Dataminer
         public float[] Damage_Bonuses;
         public float Collider_Radius;
 
+        public bool NullifyResistances;
+        public float GlobalStatusRes;
+        public float BarrierStat;
+
         public List<Damages> True_WeaponDamage = new List<Damages>();
         public float Weapon_Impact;
 
@@ -94,6 +98,13 @@ namespace Dataminer
                 Allied_To_Same_Faction = character.TargetingSystem.AlliedToSameFaction,
                 Collider_Radius = character.CharacterController.radius
             };
+
+            if (character.Stats)
+            {
+                enemyHolder.NullifyResistances = character.Stats.NullifyResistances;
+                enemyHolder.GlobalStatusRes = character.Stats.GlobalStatusRes;
+                enemyHolder.BarrierStat = ((Stat)At.GetField(character.Stats, "m_barrierStat"))?.BaseValue ?? -1f;
+            }
 
             FixName(enemyHolder, character);
 
@@ -190,7 +201,7 @@ namespace Dataminer
                     {
                         foreach (Dropable dropper in m_lootDroppers)
                         {
-                            var dropTableHolder = DM_DropTable.ParseDropTable(dropper);
+                            var dropTableHolder = DM_DropTable.ParseDropable(dropper);
                             enemyHolder.DropTable_Names.Add(dropTableHolder.Name);
                         }
                     }

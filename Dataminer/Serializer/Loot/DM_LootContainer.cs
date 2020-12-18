@@ -34,7 +34,7 @@ namespace Dataminer
             {
                 foreach (Dropable dropper in droppers)
                 {
-                    var dropableHolder = DM_DropTable.ParseDropTable(dropper, null, lootHolder.Name);
+                    var dropableHolder = DM_DropTable.ParseDropable(dropper, null, lootHolder.Name);
                     lootHolder.DropTables.Add(dropableHolder.Name);
                 }
             }

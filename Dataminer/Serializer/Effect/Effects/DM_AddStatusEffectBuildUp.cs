@@ -10,17 +10,19 @@ namespace Dataminer
     {
         public string StatusEffect = "";
         public float Buildup;
+        public float BuildUpMultiplier;
+        public bool BypassCounter;
 
         public override void SerializeEffect<T>(T effect, DM_Effect holder)
         {
-            var addStatusEffectBuildUp = effect as AddStatusEffectBuildUp;
-            var addStatusEffectBuildupHolder = holder as DM_AddStatusEffectBuildUp;
+            var comp = effect as AddStatusEffectBuildUp;
 
-            if (addStatusEffectBuildUp.Status)
-            {
-                addStatusEffectBuildupHolder.StatusEffect = addStatusEffectBuildUp.Status.IdentifierName;
-                addStatusEffectBuildupHolder.Buildup = addStatusEffectBuildUp.BuildUpValue;
-            }
+            if (comp.Status)
+                StatusEffect = comp.Status.IdentifierName;
+
+            Buildup = comp.BuildUpValue;
+            BuildUpMultiplier = comp.BuildUpMultiplier;
+            BypassCounter = comp.BypassCounter;
         }
     }
 }

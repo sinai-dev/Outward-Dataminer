@@ -68,18 +68,36 @@ namespace Dataminer
                         string dir = GetFullSaveDir(item, itemHolder);
                         Serializer.SaveToXml(dir, safename + " (" + item.gameObject.name + ")", itemHolder);
                     }
-                    catch { }
+                    catch (Exception e) 
+                    {
+                        SL.LogWarning(e.ToString());
+                    }
                 }
             }
         }
 
         public static DM_Item ParseItemToTemplate(Item item)
         {
+            if (item == null)
+                return null;
             //SL.Log("Parsing item to template: " + item.Name);
 
             var type = Serializer.GetBestDMType(item.GetType());
 
-            var holder = (DM_Item)Activator.CreateInstance(type);
+            DM_Item holder;
+            try
+            {
+                holder = (DM_Item)Activator.CreateInstance(type);
+            }
+            catch (InvalidCastException)
+            {
+                if (type == null)
+                    SL.LogWarning("type is null");
+                else
+                    SL.LogWarning("Exception casting '" + type.FullName + "' to DM_Item?");
+
+                return null;
+            }
 
             holder.SerializeItem(item, holder);
 

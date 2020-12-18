@@ -23,42 +23,46 @@ namespace Dataminer
         public float Heat_Protection;
         public float Cold_Protection;
         
-        // DLC?
         public float Corruption_Protection;
         public float Cooldown_Reduction;
         public float Hunger_Affect;
         public float Thirst_Affect;
         public float Fatigue_Affect;
 
+        public float BarrierProtection;
+        public float GlobalStatusEffectResistance;
+        public float StaminaRegenModifier;
 
         public override void SerializeStats(ItemStats stats, DM_ItemStats holder)
         {
             base.SerializeStats(stats, holder);
-
-            var equipmentStatsHolder = holder as DM_EquipmentStats;
 
             try
             {
                 var item = stats.GetComponent<Item>();
 
                 var eStats = stats as EquipmentStats;
-                equipmentStatsHolder.Cooldown_Reduction = eStats.CooldownReduction;                
-                equipmentStatsHolder.Hunger_Affect = eStats.HungerModifier;                
-                equipmentStatsHolder.Thirst_Affect = eStats.ThirstModifier;                
-                equipmentStatsHolder.Fatigue_Affect = eStats.SleepModifier;
+                Cooldown_Reduction = eStats.CooldownReduction;                
+                Hunger_Affect = eStats.HungerModifier;                
+                Thirst_Affect = eStats.ThirstModifier;                
+                Fatigue_Affect = eStats.SleepModifier;
 
-                equipmentStatsHolder.Impact_Resistance = eStats.ImpactResistance;
-                equipmentStatsHolder.Damage_Protection = eStats.GetDamageProtection(DamageType.Types.Physical);
-                equipmentStatsHolder.Stamina_Use_Penalty = eStats.StaminaUsePenalty;
-                equipmentStatsHolder.Mana_Use_Modifier = (float)At.GetField(stats as EquipmentStats, "m_manaUseModifier");
-                equipmentStatsHolder.Movement_Penalty = eStats.MovementPenalty;
-                equipmentStatsHolder.Pouch_Bonus = eStats.PouchCapacityBonus;
-                equipmentStatsHolder.Heat_Protection = eStats.HeatProtection;
-                equipmentStatsHolder.Cold_Protection = eStats.ColdProtection;
-                equipmentStatsHolder.Corruption_Protection = eStats.CorruptionResistance;
+                Impact_Resistance = eStats.ImpactResistance;
+                Damage_Protection = eStats.GetDamageProtection(DamageType.Types.Physical);
+                Stamina_Use_Penalty = eStats.StaminaUsePenalty;
+                Mana_Use_Modifier = (float)At.GetField(stats as EquipmentStats, "m_manaUseModifier");
+                Movement_Penalty = eStats.MovementPenalty;
+                Pouch_Bonus = eStats.PouchCapacityBonus;
+                Heat_Protection = eStats.HeatProtection;
+                Cold_Protection = eStats.ColdProtection;
+                Corruption_Protection = eStats.CorruptionResistance;
 
-                equipmentStatsHolder.Damage_Bonus = At.GetField(stats as EquipmentStats, "m_damageAttack") as float[];
-                equipmentStatsHolder.Damage_Resistance = At.GetField(stats as EquipmentStats, "m_damageResistance") as float[];
+                Damage_Bonus = At.GetField(stats as EquipmentStats, "m_damageAttack") as float[];
+                Damage_Resistance = At.GetField(stats as EquipmentStats, "m_damageResistance") as float[];
+
+                BarrierProtection = eStats.BarrierProtection;
+                GlobalStatusEffectResistance = eStats.GlobalStatusEffectResistance;
+                StaminaRegenModifier = eStats.StaminaRegenModifier;
             }
             catch (Exception e)
             {
