@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Dataminer
 {
-    public class DM_WindAltarActivatedCondition
+    public class DM_WindAltarActivatedCondition : DM_EffectCondition
     {
+        public override void SerializeEffect<T>(EffectCondition component, T template)
+        {
+            
+        }
     }
 }

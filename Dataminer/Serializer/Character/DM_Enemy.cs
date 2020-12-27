@@ -48,7 +48,7 @@ namespace Dataminer
         {
             var enemies = CharacterManager.Instance.Characters.Values
                     .Where(x => x.IsAI
-                        && x.Faction != Character.Factions.Player
+                        //&& x.Faction != Character.Factions.Player
                         && x.Stats != null);
 
             foreach (Character enemy in enemies)

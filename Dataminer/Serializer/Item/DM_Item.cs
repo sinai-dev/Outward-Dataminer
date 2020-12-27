@@ -45,6 +45,18 @@ namespace Dataminer
 
         public static void ParseAllItems()
         {
+            //int[] IDsToSaveIcons = new int[]
+            //{
+            //    2150140,
+            //    2150150,
+            //    2150160,
+            //    2150165,
+            //    2150170,
+            //    2150175,
+            //    2150180,
+            //    2150185,
+            //};
+
             if (References.RPM_ITEM_PREFABS is Dictionary<string, Item> ItemPrefabs)
             {
                 foreach (Item item in ItemPrefabs.Values)
@@ -53,9 +65,12 @@ namespace Dataminer
                     {
                         var safename = Serializer.SafeName(item.Name);
 
-                        //if (item.ItemIcon && !item.HasDefaultIcon)
+                        //if (IDsToSaveIcons.Contains(item.ItemID))
+                        //    CustomTextures.SaveIconAsPNG(item.ItemIcon, "ItemIcons", safename);
+
+                        //if (item.DLCID == OTWStoreAPI.DLCs.DLC2 && item.ItemIcon && !item.HasDefaultIcon)
                         //{
-                        //    SideLoader.CustomTextures.SaveIconAsPNG(item.ItemIcon, "ItemIcons", safename);
+                        //    CustomTextures.SaveIconAsPNG(item.ItemIcon, "ItemIcons", safename);
                         //}
 
                         //SL.Log("Parsing " + item.Name + ", typeof: " + item.GetType());

@@ -31,6 +31,11 @@ namespace Dataminer
 
         internal void Update()
         {
+            if (Input.GetKeyDown(KeyCode.F11))
+            {
+                StartCoroutine(ForceSpawnAllBuildings());
+            }
+
             if (Input.GetKeyDown(KeyCode.ScrollLock))
             {
                 DM_Merchant.ParseAllMerchants();
@@ -85,6 +90,21 @@ namespace Dataminer
                     MenuManager.Instance.HideMasterLoadingScreen();
                 }
 
+                // check if New Sirocco
+
+                if (SceneManagerHelper.ActiveSceneName == "NewSirocco")
+                {
+                    SL.LogWarning("Force spawning all buildings...");
+
+                    StartCoroutine(ForceSpawnAllBuildings());
+
+                    SL.LogWarning("Waiting for buildings to init...");
+                    while (!s_buildingsDoneInit)
+                    {
+                        yield return null;
+                    }
+                }
+
                 /*        Parse Scene        */
 
                 // Disable the TreeBehaviour Managers while we do stuff with enemies
@@ -100,6 +120,26 @@ namespace Dataminer
                 ParseAllLoot();
 
                 SL.Log("--- Finished Scene: " + SceneManagerHelper.ActiveSceneName + " ---");
+
+                if (SceneManagerHelper.ActiveSceneName == "NewSirocco")
+                {
+                    SL.LogWarning("Cleaning up New Sirocco stuff...");
+
+                    var merchants = Resources.FindObjectsOfTypeAll<Merchant>();
+                    SL.Log(merchants.Length + " merchants");
+                    foreach (var merchant in merchants)
+                    {
+                        if (merchant.GetComponentInParent<SNPC>() is SNPC snpc)
+                            GameObject.DestroyImmediate(snpc.gameObject);
+                        else
+                            GameObject.DestroyImmediate(merchant.gameObject);
+                    }
+
+                    var loots = Resources.FindObjectsOfTypeAll<Item>().Where(it => IsValidLoot(it));
+                    SL.Log(loots.Count() + " loots");
+                    foreach (var loot in loots)
+                        GameObject.DestroyImmediate(loot.gameObject);
+                }
             }
 
             SL.Log("___________ Finished Scenes Parse ___________");
@@ -110,7 +150,76 @@ namespace Dataminer
             SL.Log("[Dataminer] Finished.");
         }
 
-        
+        internal static bool s_buildingsDoneInit;
+
+        private IEnumerator ForceSpawnAllBuildings()
+        {
+            var player = CharacterManager.Instance.GetFirstLocalCharacter();
+            var buildingsObj = GameObject.Find("Buildings");
+
+            var buildings = References.RPM_ITEM_PREFABS.Values.Where(it => it is Building);
+            //var created = new List<Building>();
+            foreach (Building prefab in buildings)
+            {
+                SL.Log("Checking prefab " + prefab.ItemID + ": " + prefab.Name);
+
+                if (!(At.GetField(prefab, "m_upgradePhases") is Building.ConstructionPhase[] upgrades))
+                {
+                    SL.Log("m_upgradePhases was null");
+                    continue;
+                }
+
+                var obj = MakeBuilding(prefab);
+
+                yield return new WaitForSeconds(2f);
+
+                DM_Merchant.ParseAllMerchants();
+                ParseAllLoot();
+
+                GameObject.DestroyImmediate(obj);
+
+                if (upgrades.Length > 0)
+                {
+                    for (int i = 0; i < upgrades.Length; i++)
+                    {
+                        obj = MakeBuilding(prefab, i);
+                        yield return new WaitForSeconds(2f);
+
+                        DM_Merchant.ParseAllMerchants();
+                        ParseAllLoot();
+
+                        GameObject.DestroyImmediate(obj);
+                    }
+                }
+            }
+
+            yield return new WaitForSeconds(5f);
+
+            s_buildingsDoneInit = true;
+
+            GameObject MakeBuilding(Building prefab, int upgradePhase = -1)
+            {
+                var building = ItemManager.Instance.GenerateItemNetwork(prefab.ItemID) as Building;
+
+                At.SetField(building, "m_currentUpgradePhaseIndex", upgradePhase);
+
+                At.SetField(building, "m_remainingConstructionTime", 0);
+                At.SetField(building, "m_pendingUpgradePhaseIndex", 0);
+
+                building.UpdateConstruction(0f);
+                //At.Invoke(building, "ActivateLevelVisuals", Enumerable.Empty<Type>());
+
+                building.transform.parent = buildingsObj.transform;
+                //building.transform.position = player.transform.position;
+
+                //created.Add(building);
+                SL.LogWarning("Activated building " + building.Name + " (" + building.ItemID + "), phase: " + upgradePhase);
+
+                return building.gameObject;
+            }
+        }
+
+
 
         #region PARSE ALL LOOT FUNCTION
         // Parse Loot

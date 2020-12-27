@@ -156,21 +156,21 @@ namespace Dataminer
 
         public static void SaveEarlyLists()
         {
+            SL.LogWarning("saving item list");
             // ========== Items ==========
             List<string> ItemTable = new List<string>();
             foreach (var entry in Items)
             {
+                if (entry.Value == null)
+                    continue;
+
                 string saveDir = entry.Value.saveDir;
                 if (string.IsNullOrEmpty(saveDir))
                 {
-                    if (entry.Value.Tags.Contains("Consummable"))
-                    {
+                    if (entry.Value.Tags?.Contains("Consummable") ?? false)
                         saveDir = "/Consumable";
-                    }
                     else
-                    {
                         saveDir = "/_Unsorted";
-                    }
                 }
 
                 var safename = Serializer.SafeName(entry.Value.Name);
@@ -180,6 +180,7 @@ namespace Dataminer
             }
             File.WriteAllLines(Serializer.Folders.Lists + "/Items.txt", ItemTable.ToArray());
 
+            SL.LogWarning("saving effect list");
             // ========== Effects ==========
             List<string> EffectsTable = new List<string>();
             foreach (var entry in Effects)
@@ -192,6 +193,7 @@ namespace Dataminer
             }
             File.WriteAllLines(Serializer.Folders.Lists + "/Effects.txt", EffectsTable.ToArray());
 
+            SL.LogWarning("saving recipe list");
             // ========== Recipes ==========
             List<string> RecipesTable = new List<string>();
             foreach (var entry in Recipes)
@@ -214,6 +216,7 @@ namespace Dataminer
             }
             File.WriteAllLines(Serializer.Folders.Lists + "/Recipes.txt", RecipesTable.ToArray());
 
+            SL.LogWarning("saving enchant list");
             // ========== Enchantments ========
             List<string> enchantTable = new List<string>();
             foreach (var entry in EnchantmentRecipes)

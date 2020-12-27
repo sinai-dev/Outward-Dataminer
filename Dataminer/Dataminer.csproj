@@ -169,6 +169,7 @@
     <Compile Include="Serializer\Effect\Effects\DM_WeaponDamageTargetHealth.cs" />
     <Compile Include="Serializer\Enchantment\DM_Enchantment.cs" />
     <Compile Include="Serializer\Item\DM_Blueprint.cs" />
+    <Compile Include="Serializer\Item\DM_Building.cs" />
     <Compile Include="Serializer\Item\DM_DeployableTrap.cs" />
     <Compile Include="Serializer\Item\DM_Instrument.cs" />
     <Compile Include="Serializer\Item\DM_Throwable.cs" />

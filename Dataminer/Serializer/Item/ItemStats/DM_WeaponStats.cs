@@ -61,17 +61,23 @@ namespace Dataminer
                         for (int j = 0; j < data.Damage.Count; j++)
                         {
                             SL.Log("Damage[" + j + "], Real: " + data.Damage[j] + " (autoscaled: " + autoData.Damage[j] + ")");
+                            var newRatio = data.Damage[j] / datas[0].Damage[j];
+                            SL.Log("Actual ratio: " + newRatio);
                         }
                     }
                     if (!NearlyEquals(data.Knockback, autoData.Knockback))
                     {
                         SL.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], Impact is not AutoScaled!");
                         SL.Log("Real: " + data.Knockback + ", autoscaled: " + autoData.Knockback);
+                        var newRatio = data.Knockback / datas[0].Knockback;
+                        SL.Log("Actual ratio: " + newRatio);
                     }
                     if (!NearlyEquals(data.StamCost, autoData.StamCost))
                     {
                         SL.Log($"[ScaleChecking] {weapon.Name}, Data[{i}], StaminaCost is not AutoScaled!");
                         SL.Log("Real: " + data.StamCost + ", autoscaled: " + autoData.StamCost);
+                        var newRatio = data.StamCost / datas[0].StamCost;
+                        SL.Log("Actual ratio: " + newRatio);
                     }
                 }
             }
@@ -144,7 +150,7 @@ namespace Dataminer
                 Weapon.WeaponType.Sword_1H,
                 new WeaponStatData()
                 {   //                         1     2     3     4     5
-                    DamageMult = new float[] { 1.0f, 1.0f, 1.3f, 1.1f, 1.1f },
+                    DamageMult = new float[] { 1.0f, 1.0f, 1.495f, 1.265f, 1.265f },
                     ImpactMult = new float[] { 1.0f, 1.0f, 1.3f, 1.1f, 1.1f },
                     StamMult   = new float[] { 1.0f, 1.0f, 1.2f, 1.1f, 1.1f }
                 }
@@ -153,7 +159,7 @@ namespace Dataminer
                 Weapon.WeaponType.Sword_2H,
                 new WeaponStatData()
                 {   //                         1     2     3     4     5
-                    DamageMult = new float[] { 1.0f, 1.0f, 1.5f, 1.1f, 1.1f },
+                    DamageMult = new float[] { 1.0f, 1.0f, 1.5f, 1.265f, 1.265f },
                     ImpactMult = new float[] { 1.0f, 1.0f, 1.5f, 1.1f, 1.1f },
                     StamMult   = new float[] { 1.0f, 1.0f, 1.3f, 1.1f, 1.1f }
                 }
@@ -173,7 +179,7 @@ namespace Dataminer
                 {   //                         1     2     3     4     5
                     DamageMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f },
                     ImpactMult = new float[] { 1.0f, 1.0f, 1.3f, 1.3f, 1.3f },
-                    StamMult   = new float[] { 1.0f, 1.0f, 1.2f, 1.1f, 1.1f }
+                    StamMult   = new float[] { 1.0f, 1.0f, 1.375f, 1.375f, 1.35f }
                 }
             },
             {

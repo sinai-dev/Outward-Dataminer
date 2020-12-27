@@ -61,7 +61,7 @@ namespace Dataminer
                 Damage_Resistance = At.GetField(stats as EquipmentStats, "m_damageResistance") as float[];
 
                 BarrierProtection = eStats.BarrierProtection;
-                GlobalStatusEffectResistance = eStats.GlobalStatusEffectResistance;
+                GlobalStatusEffectResistance = (float)At.GetField(eStats, "m_baseStatusEffectResistance");
                 StaminaRegenModifier = eStats.StaminaRegenModifier;
             }
             catch (Exception e)

@@ -17,7 +17,7 @@ namespace Dataminer
     /// Attribute used to mark a type that needs to be serialized by the Serializer.
     /// Usage is to just put [DM_Serialized] on a base class. Derived classes will inherit it.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public class DM_Serialized : Attribute { }
 
     /// <summary>

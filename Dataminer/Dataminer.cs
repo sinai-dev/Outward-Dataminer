@@ -97,6 +97,7 @@ namespace Dataminer
 
             DM_EnchantmentRecipe.ParseAllRecipes();
 
+            SL.LogWarning("Saving early lists...");
             ListManager.SaveEarlyLists();
 
             SL.LogWarning("Finished prefab dumping.");

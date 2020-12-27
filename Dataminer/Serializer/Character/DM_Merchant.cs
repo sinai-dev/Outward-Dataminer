@@ -44,6 +44,11 @@ namespace Dataminer
             string dir = Serializer.Folders.Merchants;
             string saveName = SceneManager.Instance.GetCurrentLocation(merchant.transform.position) + " - " + merchantHolder.Name + " (" + merchantHolder.UID + ")";
 
+            if (ListManager.Merchants.ContainsKey(saveName))
+            {
+                return null;
+            }
+
             Serializer.SaveToXml(dir, saveName, merchantHolder);
 
             ListManager.Merchants.Add(saveName, merchantHolder);
@@ -56,9 +61,14 @@ namespace Dataminer
             foreach (Merchant m in Resources.FindObjectsOfTypeAll<Merchant>().Where(x => x.gameObject.scene != null && x.ShopName != "Merchant"))
             {
                 var merchantHolder = ParseMerchant(m);
+                if (merchantHolder == null)
+                    continue;
 
                 var summary = ListManager.SceneSummaries[ListManager.GetSceneSummaryKey(m.transform.position)];
-                summary.Merchants.Add(merchantHolder.Name + " (" + merchantHolder.UID + ")");
+
+                var key = merchantHolder.Name + " (" + merchantHolder.UID + ")";
+                if (!summary.Merchants.Contains(key))
+                    summary.Merchants.Add(key);
             }
         }
     }

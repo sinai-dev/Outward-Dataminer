@@ -128,7 +128,7 @@ namespace Dataminer
             { "Caldera_Dungeon8",                   "The Vault of Stone" },
             { "Caldera_Dungeon9",                   "Old Sirocco" },
             { "Caldera_Dungeon10",                  "Ark of the Exiled" },
-            { "CalderaDungeonsBosses",              "Unknown Arena" },
+            { "CalderaDungeonsBosses",              "Caldera Arena" },
             { "CalderaDungeonsSmall",               "Caldera Misc. Dungeons" },
         };
 
@@ -231,6 +231,7 @@ namespace Dataminer
                     "The Vault of Stone",
                     "Old Sirocco",
                     "Ark of the Exiled",
+                    "Caldera Arena",
                 }
             },
             {
@@ -309,13 +310,13 @@ namespace Dataminer
         {
             { "Oily Cavern",            new Vector3(0, 0, 0) },
             { "Calygrey Colosseum",     new Vector3(300, 0, 0) },
-            { "New Sirocco Mines",      new Vector3(600, 0, 0) },
+            { "The River of Red",       new Vector3(600, 0, 0) },
             { "Immaculate’s Refuge",    new Vector3(900, 0, 0) },
             { "Silkworm’s Refuge",      new Vector3(1200, 0, 0) },
             { "Giant’s Sauna",          new Vector3(1500, 0, 0) },
             { "The Tower of Regrets",   new Vector3(1800, 0, 0) },
             { "Underside Loading Dock", new Vector3(2100, 0, 0) },
-            { "The River of Red",       new Vector3(2400, 0, 0) },
+            { "New Sirocco Mines",      new Vector3(2400, 0, 0) },
             { "Ritualist’s hut",        new Vector3(2700, 0, 0) },
         };
     }
