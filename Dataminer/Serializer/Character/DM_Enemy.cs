@@ -6,6 +6,10 @@ using UnityEngine;
 using System.Text.RegularExpressions;
 using System.IO;
 using SideLoader;
+using NodeCanvas.Framework;
+using NodeCanvas.BehaviourTrees;
+using NodeCanvas.Tasks.Actions;
+using NodeCanvas.DialogueTrees;
 
 namespace Dataminer
 {
@@ -46,10 +50,12 @@ namespace Dataminer
 
         public static void ParseAllEnemies()
         {
+            var potentialEnemies = GetPotentialEnemyUIDs();
+
             var enemies = CharacterManager.Instance.Characters.Values
                     .Where(x => x.IsAI
-                        //&& x.Faction != Character.Factions.Player
-                        && x.Stats != null);
+                        && (x.Faction != Character.Factions.Player || potentialEnemies.Contains(x.UID))
+                        && x.Stats);
 
             foreach (Character enemy in enemies)
             {
@@ -82,6 +88,93 @@ namespace Dataminer
                     }
                 }
             }
+        }
+
+        private static HashSet<string> GetPotentialEnemyUIDs()
+        {
+            var ret = new HashSet<string>();
+
+            try
+            {
+                List<Graph> graphs = new List<Graph>();
+
+                graphs.AddRange(Resources.FindObjectsOfTypeAll<BehaviourTreeOwner>()
+                    .Where(it => it.graph != null && it.graph.allNodes?.Count > 0)
+                    .Select(it => it.graph));
+                graphs.AddRange(Resources.FindObjectsOfTypeAll<DialogueTreeController>()
+                    .Where(it => it.graph != null && it.graph.allNodes?.Count > 0)
+                    .Select(it => it.graph));
+
+                foreach (var graph in graphs)
+                {
+                    try
+                    {
+                        var actions = new List<ActionTask>();
+
+                        foreach (var node in graph.allNodes)
+                        {
+                            try
+                            {
+                                if (node is NodeCanvas.BehaviourTrees.ActionNode actionNode)
+                                {
+                                    if (actionNode.action is ActionList actionList && actionList.actions?.Count > 0)
+                                        actions.AddRange(actionList.actions);
+                                    else if (actionNode.action != null)
+                                        actions.Add(actionNode.action);
+                                }
+                                else if (node is NodeCanvas.DialogueTrees.ActionNode dialogNode)
+                                {
+                                    if (dialogNode.action is ActionList actionList && actionList.actions?.Count > 0)
+                                        actions.AddRange(actionList.actions);
+                                    else if (dialogNode.action != null)
+                                        actions.Add(dialogNode.action);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                SL.LogWarning("Exception parsing node " + node.name);
+                                SL.LogInnerException(e);
+                            }
+                        }
+
+                        foreach (var action in actions)
+                        {
+                            try
+                            {
+                                if (action is ChangeCharacterFaction changeCharFaction)
+                                {
+                                    ret.Add((string)At.GetField(changeCharFaction, "m_targetUID"));
+                                }
+                                else if (action is ChangeChildCharactersFaction changeChildrenFactions)
+                                {
+                                    if (changeChildrenFactions.Parent?.value)
+                                        foreach (var character in changeChildrenFactions.Parent.value.GetComponentsInChildren<Character>(true))
+                                            ret.Add(character.UID);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                SL.LogWarning("Exception checking action " + action.name);
+                                SL.LogInnerException(e);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        SL.LogWarning("Exception parsing graph " + graph.name);
+                        SL.LogInnerException(e);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                SL.LogWarning("Exception getting potential enemy UIDs");
+                SL.LogInnerException(e);
+            }
+
+            SL.LogWarning("Found " + ret.Count + " potential enemies who are marked as Players");
+
+            return ret;
         }
 
         public static DM_Enemy ParseEnemy(Character character)
@@ -201,6 +294,7 @@ namespace Dataminer
                     {
                         foreach (Dropable dropper in m_lootDroppers)
                         {
+                            At.Invoke(dropper, "InitReferences");
                             var dropTableHolder = DM_DropTable.ParseDropable(dropper);
                             enemyHolder.DropTable_Names.Add(dropTableHolder.Name);
                         }
@@ -234,15 +328,6 @@ namespace Dataminer
             List<float> damageBonuses = new List<float>();
             List<float> damageRes = new List<float>();
             List<float> damageProt = new List<float>();
-
-            //// get base stats
-            //var allDmgBonus = (At.GetValue(typeof(CharacterStats), character.Stats, "m_damageModifiers") as Stat).BaseValue;
-            //allDmgBonus -= 1;
-            //allDmgBonus *= 100f;
-
-            //var allResBonus = (At.GetValue(typeof(CharacterStats), character.Stats, "m_resistanceModifiers") as Stat).BaseValue;
-            //if (allResBonus == 1)
-            //    allResBonus = 0;
 
             var orig_DmgBonus = At.GetField(character.Stats, "m_damageTypesModifier") as Stat[];
             var orig_Res = At.GetField(character.Stats, "m_damageResistance") as Stat[];

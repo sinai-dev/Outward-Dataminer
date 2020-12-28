@@ -21,6 +21,7 @@ namespace Dataminer
         public TemperatureSteps[] Temperatures;
         public bool WindAltarActivated;
         public AreaManager.AreaEnum[] Regions;
+        public string QuestEvent;
 
         public DM_Enchantment Result;
 
@@ -70,6 +71,12 @@ namespace Dataminer
             Temperatures = recipe.Temperature;
             WindAltarActivated = recipe.WindAltarActivated;
             Regions = recipe.Region;
+
+            if (recipe.QuestEvent?.Event != null)
+            {
+                var qEvt = recipe.QuestEvent.Event;
+                QuestEvent = qEvt.EventName + " (" + qEvt.Description + ")";
+            }
 
             CompatibleEquipment = new EquipmentData();
 

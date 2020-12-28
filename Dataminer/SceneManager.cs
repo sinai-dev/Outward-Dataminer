@@ -33,7 +33,8 @@ namespace Dataminer
         {
             if (Input.GetKeyDown(KeyCode.F11))
             {
-                StartCoroutine(ForceSpawnAllBuildings());
+                DM_Enemy.ParseAllEnemies();
+                //StartCoroutine(ForceSpawnAllBuildings());
             }
 
             if (Input.GetKeyDown(KeyCode.ScrollLock))

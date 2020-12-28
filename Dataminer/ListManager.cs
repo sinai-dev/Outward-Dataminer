@@ -268,7 +268,7 @@ namespace Dataminer
             {
                 foreach (var enemyHolder in entry.Value)
                 {
-                    EnemyTable.Add(enemyHolder.Name + " (" + enemyHolder.Unique_ID + ")");
+                    EnemyTable.Add($"{enemyHolder.Name} [{enemyHolder.Unique_ID}] ({enemyHolder.GameObject_Name})");
                 }
             }
             File.WriteAllLines(Serializer.Folders.Lists + "/Enemies.txt", EnemyTable.ToArray());

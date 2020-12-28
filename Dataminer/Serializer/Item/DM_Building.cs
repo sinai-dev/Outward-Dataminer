@@ -31,7 +31,7 @@ namespace Dataminer
 
         [DM_Serialized]
         public class DM_ConstructionPhase
-        {   
+        {
             public Building.ConstructionPhase.Type PhaseType;
 
             public BuildingResourceValues ConstructionCosts;
