@@ -149,7 +149,7 @@
     <Compile Include="Serializer\Effect\Effects\DM_AddPukeOnEat.cs" />
     <Compile Include="Serializer\Effect\Effects\DM_AddStatusEffectBuildUpInstrument.cs" />
     <Compile Include="Serializer\Effect\Effects\DM_AddStatusEffectIfDead.cs" />
-    <Compile Include="Serializer\Effect\Effects\DM_AffectStatusEffectBuildUpResistance.cs" />
+    <Compile Include="Serializer\Effect\Effects\Affects\DM_AffectStatusEffectBuildUpResistance.cs" />
     <Compile Include="Serializer\Effect\Effects\DM_CreateItemEffect.cs" />
     <Compile Include="Serializer\Effect\Effects\DM_ImbueObject.cs" />
     <Compile Include="Serializer\Effect\Effects\DM_ImbueProjectile.cs" />
