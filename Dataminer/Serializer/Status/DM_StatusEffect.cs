@@ -54,7 +54,7 @@ namespace Dataminer
         public virtual void SerializeStatusEffect(StatusEffect status, EffectPreset preset)
         {
             PresetID = preset?.PresetID ?? -1;
-            Identifier = status.IdentifierName;
+            Identifier = status.IdentifierName?.Trim();
             IgnoreBuildupIfApplied = status.IgnoreBuildUpIfApplied;
             BuildupRecoverySpeed = status.BuildUpRecoverSpeed;
             DisplayedInHUD = status.DisplayInHud;
@@ -135,7 +135,7 @@ namespace Dataminer
                 {
                     if (preset is ImbueEffectPreset imbuePreset)
                     {
-                        var name = imbuePreset.Name;
+                        var name = imbuePreset.Name?.Trim();
                         var template = DM_ImbueEffect.ParseImbueEffect(imbuePreset);
                         ListManager.ImbueEffects.Add(template.StatusID.ToString(), template);
                         Serializer.SaveToXml(dir, name, template);
@@ -176,7 +176,7 @@ namespace Dataminer
 
                     var template = ParseStatusEffect(status);
 
-                    if (!string.IsNullOrEmpty(template.Name))
+                    if (!string.IsNullOrEmpty(template.Name?.Trim()))
                     {
                         if (template.PresetID == -1)
                         {

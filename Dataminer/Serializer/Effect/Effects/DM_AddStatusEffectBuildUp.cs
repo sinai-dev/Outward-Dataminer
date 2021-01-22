@@ -11,6 +11,7 @@ namespace Dataminer
         public string StatusEffect = "";
         public float Buildup;
         public float BuildUpMultiplier;
+        public bool AffectController;
         public bool BypassCounter;
 
         public override void SerializeEffect<T>(T effect, DM_Effect holder)
@@ -23,6 +24,7 @@ namespace Dataminer
             Buildup = comp.BuildUpValue;
             BuildUpMultiplier = comp.BuildUpMultiplier;
             BypassCounter = comp.BypassCounter;
+            AffectController = comp.AffectController;
         }
     }
 }

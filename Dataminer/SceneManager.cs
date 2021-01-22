@@ -70,12 +70,12 @@ namespace Dataminer
         {
             foreach (string sceneName in SceneHelper.SceneBuildNames.Keys)
             {
-                SL.Log("--- Parsing " + sceneName + " ---");
-
                 /*        Load Scene        */
 
                 if (SceneManagerHelper.ActiveSceneName != sceneName)
                 {
+                    SL.Log("--- Loading " + sceneName + " ---");
+
                     NetworkLevelLoader.Instance.RequestSwitchArea(sceneName, 0, 1.5f);
 
                     yield return new WaitForSeconds(5f);
@@ -91,56 +91,41 @@ namespace Dataminer
                     MenuManager.Instance.HideMasterLoadingScreen();
                 }
 
+                SL.Log("Parsing scene " + sceneName + "...");
+
+                /*        Parse Scene        */
+
+                //// Disable the TreeBehaviour Managers while we do stuff with enemies
+                //DisableCanvases();
+
+                // Parse Enemies
+                SL.Log("Parsing enemies");
+                DM_Enemy.ParseAllEnemies();
+
+                // Parse Merchants
+                SL.Log("Parsing merchants");
+                DM_Merchant.ParseAllMerchants();
+
+                // Parse Loot (+ item sources)
+                SL.Log("Parsing loot");
+                ParseAllLoot();
+
                 // check if New Sirocco
 
                 if (SceneManagerHelper.ActiveSceneName == "NewSirocco")
                 {
-                    SL.LogWarning("Force spawning all buildings...");
+                    SL.LogWarning("NEW SIROCCO: Dumping all buildings...");
 
-                    StartCoroutine(ForceSpawnAllBuildings());
+                    StartCoroutine(DatamineBuildings());
 
-                    SL.LogWarning("Waiting for buildings to init...");
-                    while (!s_buildingsDoneInit)
-                    {
+                    while (!s_doneBuildings)
                         yield return null;
-                    }
+
+                    ClearScene();
+                    yield return new WaitForSeconds(1f);
                 }
-
-                /*        Parse Scene        */
-
-                // Disable the TreeBehaviour Managers while we do stuff with enemies
-                DisableCanvases();
-
-                // Parse Enemies
-                DM_Enemy.ParseAllEnemies();
-
-                // Parse Merchants
-                DM_Merchant.ParseAllMerchants();
-
-                // Parse Loot (+ item sources)
-                ParseAllLoot();
 
                 SL.Log("--- Finished Scene: " + SceneManagerHelper.ActiveSceneName + " ---");
-
-                if (SceneManagerHelper.ActiveSceneName == "NewSirocco")
-                {
-                    SL.LogWarning("Cleaning up New Sirocco stuff...");
-
-                    var merchants = Resources.FindObjectsOfTypeAll<Merchant>();
-                    SL.Log(merchants.Length + " merchants");
-                    foreach (var merchant in merchants)
-                    {
-                        if (merchant.GetComponentInParent<SNPC>() is SNPC snpc)
-                            GameObject.DestroyImmediate(snpc.gameObject);
-                        else
-                            GameObject.DestroyImmediate(merchant.gameObject);
-                    }
-
-                    var loots = Resources.FindObjectsOfTypeAll<Item>().Where(it => IsValidLoot(it));
-                    SL.Log(loots.Count() + " loots");
-                    foreach (var loot in loots)
-                        GameObject.DestroyImmediate(loot.gameObject);
-                }
             }
 
             SL.Log("___________ Finished Scenes Parse ___________");
@@ -151,9 +136,9 @@ namespace Dataminer
             SL.Log("[Dataminer] Finished.");
         }
 
-        internal static bool s_buildingsDoneInit;
+        internal static bool s_doneBuildings;
 
-        private IEnumerator ForceSpawnAllBuildings()
+        private IEnumerator DatamineBuildings()
         {
             var player = CharacterManager.Instance.GetFirstLocalCharacter();
             var buildingsObj = GameObject.Find("Buildings");
@@ -170,33 +155,38 @@ namespace Dataminer
                     continue;
                 }
 
-                var obj = MakeBuilding(prefab);
+                ClearScene();
+                yield return new WaitForSeconds(1f);
 
-                yield return new WaitForSeconds(2f);
+                MakeBuilding(prefab);
+
+                yield return new WaitForSeconds(1f);
 
                 DM_Merchant.ParseAllMerchants();
                 ParseAllLoot();
 
-                GameObject.DestroyImmediate(obj);
+                ClearScene();
+                yield return new WaitForSeconds(1f);
 
                 if (upgrades.Length > 0)
                 {
                     for (int i = 0; i < upgrades.Length; i++)
                     {
-                        obj = MakeBuilding(prefab, i);
-                        yield return new WaitForSeconds(2f);
+                        MakeBuilding(prefab, i);
+                        yield return new WaitForSeconds(1f);
 
                         DM_Merchant.ParseAllMerchants();
                         ParseAllLoot();
 
-                        GameObject.DestroyImmediate(obj);
+                        ClearScene();
+                        yield return new WaitForSeconds(1f);
                     }
                 }
             }
 
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(1f);
 
-            s_buildingsDoneInit = true;
+            s_doneBuildings = true;
 
             GameObject MakeBuilding(Building prefab, int upgradePhase = -1)
             {
@@ -205,7 +195,7 @@ namespace Dataminer
                 At.SetField(building, "m_currentUpgradePhaseIndex", upgradePhase);
 
                 At.SetField(building, "m_remainingConstructionTime", 0);
-                At.SetField(building, "m_pendingUpgradePhaseIndex", 0);
+                At.SetField(building, "m_pendingUpgradePhaseIndex", -1);
 
                 building.UpdateConstruction(0f);
                 //At.Invoke(building, "ActivateLevelVisuals", Enumerable.Empty<Type>());
@@ -220,7 +210,25 @@ namespace Dataminer
             }
         }
 
+        static void ClearScene()
+        {
+            var findall = Resources.FindObjectsOfTypeAll<Building>();
+            foreach (var b in findall)
+            {
+                if (b.gameObject.scene.name == SceneManagerHelper.ActiveSceneName)
+                    GameObject.Destroy(b.gameObject);
+            }
 
+            //cleanup loot we have already parsed
+            var loot = Resources.FindObjectsOfTypeAll<Item>().Where(it => IsValidLoot(it));
+            foreach (var item in loot)
+                GameObject.Destroy(item.gameObject);
+
+            //cleanup merchants
+            var merchants = Resources.FindObjectsOfTypeAll<Merchant>();
+            foreach (var merchant in merchants)
+                GameObject.Destroy(merchant.gameObject);
+        }
 
         #region PARSE ALL LOOT FUNCTION
         // Parse Loot
@@ -286,7 +294,7 @@ namespace Dataminer
                     {
                         summary.Item_Spawns.Add(new DM_ItemSpawn
                         {
-                            Name = item.Name,
+                            Name = item.Name?.Trim(),
                             Item_ID = item.ItemID,
                             Quantity = 1,
                             positions = new List<Vector3>

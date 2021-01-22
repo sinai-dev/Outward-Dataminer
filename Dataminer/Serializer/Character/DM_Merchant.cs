@@ -22,7 +22,7 @@ namespace Dataminer
         {
             var merchantHolder = new DM_Merchant
             {
-                Name = merchant.ShopName,
+                Name = merchant.ShopName?.Trim(),
                 UID = merchant.HolderUID
             };
 

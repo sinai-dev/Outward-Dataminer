@@ -19,8 +19,6 @@ namespace Dataminer
 
             template.CollisionBehaviour = comp.CollisionBehavior;
             template.ProjectileBehaviour = comp.ProjectileBehavior;
-            template.DefenseLength = comp.DefenseLength;
-            template.DefenseRange = comp.DefenseRange;
         }
     }
 }

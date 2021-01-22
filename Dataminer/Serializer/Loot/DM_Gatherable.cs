@@ -19,7 +19,7 @@ namespace Dataminer
         {
             var gatherableHolder = new DM_Gatherable
             {
-                Name = gatherable.Name,
+                Name = gatherable.Name?.Trim(),
                 ItemID = gatherable.ItemID
             };
 

@@ -17,32 +17,40 @@ namespace Dataminer
         public string Name;
         public string DefaultName;
 
-        public List<ItemLocalizationHolder> ItemLocalizations = new List<ItemLocalizationHolder>();
-        public List<DialogueLocalizationHolder> DialogueLocalizations = new List<DialogueLocalizationHolder>();
-        public List<LocalizationEntryHolder> MenuLocalizations = new List<LocalizationEntryHolder>();
-        public List<LocalizationEntryHolder> LoadingTipsLocalization = new List<LocalizationEntryHolder>();
+        public static List<ItemLoc> Items = new List<ItemLoc>();
+        public static List<Dialogue> DialogueOther = new List<Dialogue>();
+        public static List<Dialogue> DialogueBC = new List<Dialogue>();
+        public static List<Dialogue> DialogueHK = new List<Dialogue>();
+        public static List<Dialogue> DialogueHM = new List<Dialogue>();
+        public static List<Dialogue> DialogueSO = new List<Dialogue>();
+        public static List<Dialogue> DialogueCA = new List<Dialogue>();
+        public static List<BasicLoc> GeneralLocalization = new List<BasicLoc>();
+        public static List<BasicLoc> LoadingTips = new List<BasicLoc>();
 
         // save orig XML
         public static void SaveLocalization(LocalizationReference.Localization loc)
         {
-            var locHolder = new LocalizationHolder
-            {
-                Name = loc.Name,
-                DefaultName = loc.DefaultName
-            };
-
-            locHolder.DialogueLocalizations = LoadDialogue(loc.DialogueLocalizations);
-            locHolder.ItemLocalizations = LoadItems(loc.ItemLocalizations);
-            locHolder.MenuLocalizations = LoadMenu(loc.MenuLocalizations);
-            locHolder.LoadingTipsLocalization = LoadTips(loc.LoadingTipsLocalization);
+            LoadDialogue(loc.DialogueLocalizations);
+            LoadItems(loc.ItemLocalizations);
+            LoadMenu(loc.MenuLocalizations);
+            LoadTips(loc.LoadingTipsLocalization);
 
             // Serialize
 
-            Serializer.SaveToXml(Serializer.Folders.Main, "Localization", locHolder);
+            Serializer.SaveToXml(Serializer.Folders.Main + @"\Localization", "Items", Items);
+            Serializer.SaveToXml(Serializer.Folders.Main + @"\Localization", "General", GeneralLocalization);
+            Serializer.SaveToXml(Serializer.Folders.Main + @"\Localization", "LoadingTips", LoadingTips);
+
+            Serializer.SaveToXml(Serializer.Folders.Main + @"\Localization", "Dialogue_Other", DialogueOther);
+            Serializer.SaveToXml(Serializer.Folders.Main + @"\Localization", "Dialogue_BlueChamber", DialogueBC);
+            Serializer.SaveToXml(Serializer.Folders.Main + @"\Localization", "Dialogue_HeroicKingdom", DialogueHK);
+            Serializer.SaveToXml(Serializer.Folders.Main + @"\Localization", "Dialogue_HolyMission", DialogueHM);
+            Serializer.SaveToXml(Serializer.Folders.Main + @"\Localization", "Dialogue_Sorobor", DialogueSO);
+            Serializer.SaveToXml(Serializer.Folders.Main + @"\Localization", "Dialogue_Sirocco", DialogueCA);
         }
 
         // Parse Menu XML (load from game data)
-        public static List<LocalizationEntryHolder> LoadMenu(TextAsset[] array)
+        public static void LoadMenu(TextAsset[] array)
         {
             var dict = new Dictionary<string, string>();
 
@@ -77,22 +85,22 @@ namespace Dataminer
                 }
             }
 
-            var list = new List<LocalizationEntryHolder>();
+            var list = new List<BasicLoc>();
 
             foreach (var entry in dict)
             {
-                list.Add(new LocalizationEntryHolder
+                list.Add(new BasicLoc
                 {
                     Key = entry.Key,
                     Value = entry.Value
                 });
             }
 
-            return list;
+            GeneralLocalization = list;
         }
 
         // Parse Tips XML (load from game data)
-        public static List<LocalizationEntryHolder> LoadTips(TextAsset asset)
+        public static void LoadTips(TextAsset asset)
         {
             var dict = new Dictionary<string, string>();
 
@@ -121,24 +129,24 @@ namespace Dataminer
                 }
             }
 
-            var list = new List<LocalizationEntryHolder>();
+            var list = new List<BasicLoc>();
 
             foreach (var entry in dict)
             {
-                list.Add(new LocalizationEntryHolder
+                list.Add(new BasicLoc
                 {
                     Key = entry.Key,
                     Value = entry.Value
                 });
             }
 
-            return list;
+            LoadingTips = list;
         }
 
         // Parse Items XML (load from game data)
-        public static List<ItemLocalizationHolder> LoadItems(TextAsset[] array)
+        public static void LoadItems(TextAsset[] array)
         {
-            var dict = new Dictionary<int, ItemLocalizationHolder>();
+            var dict = new Dictionary<int, ItemLoc>();
 
             XmlDocument xmlDocument = new XmlDocument();
 
@@ -157,7 +165,7 @@ namespace Dataminer
                         string name = (node["column_2"] == null) ? string.Empty : node["column_2"].InnerText;
                         string desc = (node["column_3"] == null) ? string.Empty : node["column_3"].InnerText;
 
-                        dict.Add(key, new ItemLocalizationHolder
+                        dict.Add(key, new ItemLoc
                         {
                             Name = name,
                             Desc = desc.Replace("\n\n", "\n")
@@ -166,11 +174,11 @@ namespace Dataminer
                 }
             }
 
-            var list = new List<ItemLocalizationHolder>();
+            var list = new List<ItemLoc>();
 
             foreach (var entry in dict)
             {
-                list.Add(new ItemLocalizationHolder
+                list.Add(new ItemLoc
                 {
                     KeyID = entry.Key,
                     Name = entry.Value.Name,
@@ -178,13 +186,13 @@ namespace Dataminer
                 });
             }
 
-            return list;
+            Items = list;
         }
 
         // Parse Dialogue XML (load from game data)
-        public static List<DialogueLocalizationHolder> LoadDialogue(TextAsset[] array)
+        public static void LoadDialogue(TextAsset[] array)
         {
-            var dict = new Dictionary<string, DialogueLocalizationHolder>();
+            var dict = new Dictionary<string, Dialogue>();
 
             XmlDocument xmlDocument = new XmlDocument();
 
@@ -203,23 +211,23 @@ namespace Dataminer
                             string general = (node2["column_2"] == null) ? string.Empty : node2["column_2"].InnerText.Replace("\n\n", "\n");
                             general = general.Replace(" !", "\u00a0!");
                             general = general.Replace(" ?", "\u00a0?");
-                            string female = (node2["column_3"] == null) ? string.Empty : node2["column_3"].InnerText.Replace("\n\n", "\n");
+                            //string female = (node2["column_3"] == null) ? string.Empty : node2["column_3"].InnerText.Replace("\n\n", "\n");
                             if (!string.IsNullOrEmpty(key) || !string.IsNullOrEmpty(general))
                             {
-                                string uniqueAudioName = (node2["column_4"] == null) ? string.Empty : node2["column_4"].InnerText;
-                                string emoteData = (node2["column_5"] == null) ? string.Empty : node2["column_5"].InnerText;
-                                string animData = (node2["column_6"] == null) ? string.Empty : node2["column_6"].InnerText;
+                                //string uniqueAudioName = (node2["column_4"] == null) ? string.Empty : node2["column_4"].InnerText;
+                                //string emoteData = (node2["column_5"] == null) ? string.Empty : node2["column_5"].InnerText;
+                                //string animData = (node2["column_6"] == null) ? string.Empty : node2["column_6"].InnerText;
 
-                                if (!string.IsNullOrEmpty(key) && key != "loc_key" && !dict.ContainsKey(key))
+                                if (key != "loc_key" && !dict.ContainsKey(key))
                                 {
-                                    dict.Add(key, new DialogueLocalizationHolder
+                                    dict.Add(key, new Dialogue
                                     {
                                         Key = key,
-                                        General = general,
-                                        Female = female,
-                                        UniqueAudioName = uniqueAudioName,
-                                        EmoteTags = emoteData,
-                                        AnimTags = animData
+                                        Value = general,
+                                        //Female = female,
+                                        //UniqueAudioName = uniqueAudioName,
+                                        //EmoteTags = emoteData,
+                                        //AnimTags = animData
                                     });
                                 }
                             }
@@ -228,12 +236,28 @@ namespace Dataminer
                 }
             }
 
-            return dict.Values.ToList();
+            foreach (var entry in dict.Values)
+            {
+                if (entry.Key.Contains("_BC_"))
+                    DialogueBC.Add(entry);
+                else if (entry.Key.Contains("_HK_") || entry.Key.Contains("TendFlame") || entry.Key.Contains("MouthFeed"))
+                    DialogueHK.Add(entry);
+                else if (entry.Key.Contains("_HM_") || entry.Key.Contains("Permadeath"))
+                    DialogueHM.Add(entry);
+                else if (entry.Key.Contains("_SO"))
+                    DialogueSO.Add(entry);
+                else if (entry.Key.Contains("_CA"))
+                    DialogueCA.Add(entry);
+                else
+                    DialogueOther.Add(entry);
+            }
+
+            return;
         }
     }
 
     [DM_Serialized]
-    public class ItemLocalizationHolder
+    public class ItemLoc
     {
         public int KeyID;
         public string Name;
@@ -241,18 +265,18 @@ namespace Dataminer
     }
 
     [DM_Serialized]
-    public class DialogueLocalizationHolder
+    public class Dialogue
     {
         public string Key;
-        public string General;
-        public string Female;
-        public string UniqueAudioName;
-        public string AnimTags;
-        public string EmoteTags;
+        public string Value;
+        //public string Female;
+        //public string UniqueAudioName;
+        //public string AnimTags;
+        //public string EmoteTags;
     }
 
     [DM_Serialized]
-    public class LocalizationEntryHolder
+    public class BasicLoc
     {
         public string Key;
         public string Value;

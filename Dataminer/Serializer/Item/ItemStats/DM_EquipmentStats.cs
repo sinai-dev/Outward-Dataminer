@@ -14,9 +14,11 @@ namespace Dataminer
         public float Damage_Protection;
 
         public float[] Damage_Bonus = new float[9];
+        public float Impact_Bonus;
 
         public float Stamina_Use_Penalty;
         public float Mana_Use_Modifier;
+        public float Mana_Regen;
         public float Movement_Penalty;
 
         public float Pouch_Bonus;
@@ -50,15 +52,17 @@ namespace Dataminer
                 Impact_Resistance = eStats.ImpactResistance;
                 Damage_Protection = eStats.GetDamageProtection(DamageType.Types.Physical);
                 Stamina_Use_Penalty = eStats.StaminaUsePenalty;
-                Mana_Use_Modifier = (float)At.GetField(stats as EquipmentStats, "m_manaUseModifier");
+                Mana_Use_Modifier = (float)At.GetField(eStats, "m_manaUseModifier");
+                Mana_Regen = eStats.ManaRegenBonus;
                 Movement_Penalty = eStats.MovementPenalty;
                 Pouch_Bonus = eStats.PouchCapacityBonus;
                 Heat_Protection = eStats.HeatProtection;
                 Cold_Protection = eStats.ColdProtection;
                 Corruption_Protection = eStats.CorruptionResistance;
 
-                Damage_Bonus = At.GetField(stats as EquipmentStats, "m_damageAttack") as float[];
-                Damage_Resistance = At.GetField(stats as EquipmentStats, "m_damageResistance") as float[];
+                Damage_Bonus = At.GetField(eStats, "m_damageAttack") as float[];
+                Damage_Resistance = At.GetField(eStats, "m_damageResistance") as float[];
+                Impact_Bonus = eStats.ImpactModifier;
 
                 BarrierProtection = eStats.BarrierProtection;
                 GlobalStatusEffectResistance = (float)At.GetField(eStats, "m_baseStatusEffectResistance");

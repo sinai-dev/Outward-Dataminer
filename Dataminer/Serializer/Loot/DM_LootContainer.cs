@@ -20,7 +20,7 @@ namespace Dataminer
         {
             var lootHolder = new DM_LootContainer
             {
-                Name = loot.Name,
+                Name = loot.Name?.Trim(),
                 ItemID = loot.ItemID,
                 UID = loot.UID
             };

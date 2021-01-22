@@ -52,40 +52,54 @@ namespace Dataminer
         {
             var potentialEnemies = GetPotentialEnemyUIDs();
 
-            var enemies = CharacterManager.Instance.Characters.Values
-                    .Where(x => x.IsAI
-                        && (x.Faction != Character.Factions.Player || potentialEnemies.Contains(x.UID))
-                        && x.Stats);
+            var enemies = Resources.FindObjectsOfTypeAll<Character>()
+                                      .Where(it => it.gameObject.scene.name == SceneManagerHelper.ActiveSceneName
+                                                && CanEnemy(it)
+                                                && it.Stats);
+
+            bool CanEnemy(Character it) => SceneManagerHelper.ActiveSceneName == "NewSirocco" 
+                                           || it.Faction != Character.Factions.Player 
+                                           || potentialEnemies.Contains(it.UID);
+
+            SL.Log("Found " + enemies.Count() + " enemies");
 
             foreach (Character enemy in enemies)
             {
-                var enemyHolder = ParseEnemy(enemy);
-
-                if (enemyHolder != null)
+                try
                 {
-                    var summary = ListManager.SceneSummaries[ListManager.GetSceneSummaryKey(enemy.transform.position)];
+                    var enemyHolder = ParseEnemy(enemy);
 
-                    // add to scene summary
-                    string saveName = enemyHolder.Name + " (" + enemyHolder.Unique_ID + ")";
-                    bool found = false;
-                    foreach (QuantityHolder holder in summary.Enemies)
+                    if (enemyHolder != null)
                     {
-                        if (holder.Name == saveName)
+                        var summary = ListManager.SceneSummaries[ListManager.GetSceneSummaryKey(enemy.transform.position)];
+
+                        // add to scene summary
+                        string saveName = enemyHolder.Name?.Trim() + " (" + enemyHolder.Unique_ID + ")";
+                        bool found = false;
+                        foreach (QuantityHolder holder in summary.Enemies)
                         {
-                            // list contains this unique ID. add to.
-                            holder.Quantity++;
-                            found = true;
-                            break;
+                            if (holder.Name == saveName)
+                            {
+                                // list contains this unique ID. add to.
+                                holder.Quantity++;
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found)
+                        {
+                            summary.Enemies.Add(new QuantityHolder
+                            {
+                                Name = saveName,
+                                Quantity = 1
+                            });
                         }
                     }
-                    if (!found)
-                    {
-                        summary.Enemies.Add(new QuantityHolder
-                        {
-                            Name = saveName,
-                            Quantity = 1
-                        });
-                    }
+                }
+                catch (Exception e)
+                {
+                    SL.LogWarning("Exception parsing enemy " + enemy.Name + "!");
+                    SL.LogInnerException(e);
                 }
             }
         }
@@ -184,7 +198,7 @@ namespace Dataminer
 
             var enemyHolder = new DM_Enemy
             {
-                Name = character.Name,
+                Name = character.Name?.Trim(),
                 Unique_ID = 1,
                 Max_Health = character.Stats.MaxHealth,
                 Faction = character.Faction.ToString(),
@@ -192,12 +206,9 @@ namespace Dataminer
                 Collider_Radius = character.CharacterController.radius
             };
 
-            if (character.Stats)
-            {
-                enemyHolder.NullifyResistances = character.Stats.NullifyResistances;
-                enemyHolder.GlobalStatusRes = character.Stats.GlobalStatusRes;
-                enemyHolder.BarrierStat = ((Stat)At.GetField(character.Stats, "m_barrierStat"))?.BaseValue ?? -1f;
-            }
+            enemyHolder.NullifyResistances = character.Stats.NullifyResistances;
+            enemyHolder.GlobalStatusRes = character.Stats.GlobalStatusRes;
+            enemyHolder.BarrierStat = ((Stat)At.GetField(character.GetComponent<CharacterStats>(), "m_barrierStat"))?.BaseValue ?? -1f;
 
             FixName(enemyHolder, character);
 
@@ -549,7 +560,7 @@ namespace Dataminer
             SL.LogWarning(string.Format("Saving enemy '{0}' (unique ID: {1})", holder.Name, holder.Unique_ID));
 
             var dir = Serializer.Folders.Enemies;
-            string saveName = holder.Name + " (" + holder.Unique_ID + ")";
+            string saveName = $"{Serializer.SafeName(holder.Name)} [{holder.Unique_ID}] ({holder.GameObject_Name})";
 
             // overwrite all enemies, to update Locations_Found list automatically.
             string path = dir + "/" + saveName + ".xml";

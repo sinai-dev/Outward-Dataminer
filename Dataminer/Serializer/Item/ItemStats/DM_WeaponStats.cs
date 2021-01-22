@@ -91,8 +91,6 @@ namespace Dataminer
 
         #region Auto-scaling checking
 
-        // NOTE: THIS IS WRONG FOR LATEST PATCH, NEEDS FIX.
-
         public static WeaponStats.AttackData[] GetScaledAttackData(Weapon weapon)
         {
             var type = weapon.Type;

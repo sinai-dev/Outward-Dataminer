@@ -32,6 +32,8 @@ namespace Dataminer
                 dropTableHolder.Name = SceneManager.Instance.GetCurrentLocation(merchant.transform.position) + " - " + merchant.ShopName;
             }
 
+            dropTableHolder.Name = dropTableHolder.Name.Trim();
+
             if (At.GetField(dropable, "m_allGuaranteedDrops") is List<GuaranteedDrop> guaranteedDrops)
             {
                 foreach (GuaranteedDrop gDropper in guaranteedDrops)

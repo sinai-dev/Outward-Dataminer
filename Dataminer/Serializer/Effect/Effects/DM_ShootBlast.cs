@@ -20,15 +20,6 @@ namespace Dataminer
         public bool HitOnShoot;
         public bool IgnoreShooter;
 
-        public bool IgnoreStop;
-        public float NoTargetForwardMultiplier;
-        public bool ParentToShootTransform;
-        public bool UseTargetCharacterPositionType;
-
-        public EquipmentSoundMaterials ImpactSoundMaterial;
-        public bool DontPlayHitSound;
-        public bool FXIsWorld;
-
         public List<DM_EffectTransform> BlastEffects = new List<DM_EffectTransform>();
 
         public override void SerializeEffect<T>(T effect, DM_Effect holder)
@@ -42,22 +33,15 @@ namespace Dataminer
             {
                 template.BaseBlast = blast.name;
                 template.AffectHitTargetCenter = blast.AffectHitTargetCenter;
-                template.DontPlayHitSound = blast.DontPlayHitSound;
-                template.FXIsWorld = blast.FXIsWorld;
                 template.HitOnShoot = blast.HitOnShoot;
                 template.IgnoreShooter = blast.IgnoreShooter;
-                template.ImpactSoundMaterial = blast.ImpactSoundMaterial;
                 template.Interruptible = blast.Interruptible;
                 template.MaxHitTargetCount = blast.MaxHitTargetCount;
                 template.Radius = blast.Radius;
                 template.RefreshTime = blast.RefreshTime;
 
                 template.BlastLifespan = comp.BlastLifespan;
-                template.IgnoreStop = comp.IgnoreStop;
                 template.InstantiatedAmount = comp.InstanstiatedAmount;
-                template.NoTargetForwardMultiplier = comp.NoTargetForwardMultiplier;
-                template.ParentToShootTransform = comp.ParentToShootTransform;
-                template.UseTargetCharacterPositionType = comp.UseTargetCharacterPositionType;
 
                 foreach (Transform child in blast.transform)
                 {

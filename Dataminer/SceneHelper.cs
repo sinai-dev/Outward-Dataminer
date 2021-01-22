@@ -309,7 +309,7 @@ namespace Dataminer
         public static Dictionary<string, Vector3> CalderaDungeons = new Dictionary<string, Vector3>
         {
             { "Oily Cavern",            new Vector3(0, 0, 0) },
-            { "Calygrey Colosseum",     new Vector3(300, 0, 0) },
+            { "Calygrey Colosseum",     new Vector3(150, 0, 0) },
             { "The River of Red",       new Vector3(600, 0, 0) },
             { "Immaculate’s Refuge",    new Vector3(900, 0, 0) },
             { "Silkworm’s Refuge",      new Vector3(1200, 0, 0) },

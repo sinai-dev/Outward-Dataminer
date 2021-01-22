@@ -11,12 +11,19 @@ namespace Dataminer
         public string Stat_Tag = "";
         public float AffectQuantity;
         public bool IsModifier;
+        public string[] Tags;
 
         public override void SerializeEffect<T>(T effect, DM_Effect holder)
         {
-            (holder as DM_AffectStat).Stat_Tag = (effect as AffectStat).AffectedStat.Tag.TagName;
-            (holder as DM_AffectStat).AffectQuantity = (effect as AffectStat).Value;
-            (holder as DM_AffectStat).IsModifier = (effect as AffectStat).IsModifier;
+            var comp = effect as AffectStat;
+            this.Stat_Tag = comp.AffectedStat.Tag.TagName;
+            this.AffectQuantity = comp.Value;
+            this.IsModifier = comp.IsModifier;
+
+            if (comp.Tags != null)
+                this.Tags = comp.Tags
+                           .Select(it => it.Tag.TagName)
+                           .ToArray();
         }
     }
 }

@@ -29,11 +29,14 @@ namespace Dataminer
             Instance = this;
         }
 
+        internal static float m_lastRealTime;
+
         internal void Update()
         {
             if (TimerStarted)
             {
-                ComboTimer += Time.deltaTime;
+                ComboTimer += Time.realtimeSinceStartup - m_lastRealTime;
+                m_lastRealTime = Time.realtimeSinceStartup;
             }
         }
 
@@ -64,6 +67,7 @@ namespace Dataminer
                 {
                     if (!TimerStarted)
                     {
+                        m_lastRealTime = Time.realtimeSinceStartup;
                         LastComboTime = ComboTimer;
                         ComboTimer = 0f;
                         TimerStarted = true;
